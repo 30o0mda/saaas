@@ -10,18 +10,6 @@ use Illuminate\Support\Facades\Hash;
 
 class AdminAuthController extends Controller
 {
-
-// public function login(LoginRequest $request)
-// {
-//     $data = $request->validated();
-//     $admin = Admin::where('email', $data['email'])->first();
-//     if (!$admin && !Hash::check($data['password'], $admin->password)) {
-//         return response()->json(['massage' => 'success'],401);
-//     }
-//     $token = $admin->createToken('admin-token')->plainTextToken;
-//     return response()->json(['massage' => 'success','token' => $token,'admin' => $admin]);
-// }
-
 public function login(LoginRequest $request)
 {
     $data = $request->validated();

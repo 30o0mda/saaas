@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Enums;
+namespace App\Http\Enum;
 
 enum OrganizationEnum: int
 {

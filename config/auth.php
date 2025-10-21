@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Authentication Defaults
@@ -41,10 +40,15 @@ return [
             'provider' => 'users',
         ],
 
-    'admin' => [
-        'driver' => 'sanctum',
-        'provider' => 'admins',
-    ],
+        'admin' => [
+            'driver' => 'sanctum',
+            'provider' => 'admins',
+        ],
+
+        'organization' => [
+            'driver' => 'sanctum', // أو 'session' إذا كان الحارس مخصص لتسجيل الدخول التقليدي
+            'provider' => 'organizations', // لازم يكون موجود تحت 'providers'
+        ],
     ],
 
     /*
@@ -70,10 +74,15 @@ return [
             'model' => App\Models\User::class,
         ],
 
-     'admins' => [
-        'driver' => 'eloquent',
-        'model' => App\Models\Admin::class,
-    ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
+
+        'organizations' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\OrganizationEmployee::class, // تأكد من أن هذا الموديل موجود فعلاً
+        ],
 
         // 'users' => [
         //     'driver' => 'database',
