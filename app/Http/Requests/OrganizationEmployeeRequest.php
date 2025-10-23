@@ -25,7 +25,7 @@ class OrganizationEmployeeRequest extends FormRequest
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|unique:organization_employees,email',
             'phone'=>'required|string',
-            'type'=>'required|string',
+            'type'=>'required|int',
             'password' => 'required|string',
 
         ];

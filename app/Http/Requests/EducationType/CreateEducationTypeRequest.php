@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\EducationType;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateOrganizationRequest extends FormRequest
+class CreateEducationTypeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,11 +23,10 @@ class CreateOrganizationRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:organizations,email',
-            'phone' => 'required|string|unique:organizations,phone',
-            'type' => 'required|string',
-            'max_teachers' => 'required|Integer',
-            // 'admin_id' => 'required|exists:admins,id',
+            'description' => 'nullable|string|max:255',
+            'organization_id' => 'nullable|exists:organizations,id',
+            'is_active' => 'nullable|boolean',
+
         ];
     }
 }

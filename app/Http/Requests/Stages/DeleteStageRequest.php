@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Stages;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CreateOrganizationRequest extends FormRequest
+class DeleteStageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,8 @@ class CreateOrganizationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|unique:organizations,email',
-            'phone' => 'required|string|unique:organizations,phone',
-            'type' => 'required|string',
-            'max_teachers' => 'required|Integer',
-            // 'admin_id' => 'required|exists:admins,id',
+            'stage_id' => 'required|exists:education_types,id',
         ];
     }
 }
+

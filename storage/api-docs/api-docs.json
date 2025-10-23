@@ -1,0 +1,641 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "SAAS API",
+        "description": "API documentation for SAAS Dashboard",
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "/api"
+        }
+    ],
+    "paths": {
+        "/admin/login": {
+            "post": {
+                "tags": [
+                    "Organization Admins"
+                ],
+                "summary": "تسجيل الدخول",
+                "description": "تسجيل الدخول للادمن",
+                "operationId": "ca85837b6fc19d94a39a445d949d4ec9",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "credentials",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "credentials": {
+                                        "type": "string",
+                                        "example": "email or phone"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تسجيل الدخول بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تسجيل الدخول بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/AdminResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "بيانات الدخول غير صحيحة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "بيانات الدخول غير صحيحة"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "الحقل البريد الإلكتروني مستخدم مسبقًا"
+                                                ],
+                                                "password": [
+                                                    "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/create_organization": {
+            "post": {
+                "tags": [
+                    "Organization Admins"
+                ],
+                "summary": "إنشاء منظمة",
+                "description": "إنشاء منظمة جديدة باستخدام البيانات المدخلة",
+                "operationId": "c9b57245d469825cd739e417b4de6085",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "phone",
+                                    "email",
+                                    "type",
+                                    "is_master"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "اسم المنظمة"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+201234567890"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "employee@example.com"
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "مدير"
+                                    },
+                                    "is_master": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "admin_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "تم إنشاء المنظمة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء المنظمة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "id": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                },
+                                                "name": {
+                                                    "type": "string",
+                                                    "example": "Ahmed Emad"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "format": "email",
+                                                    "example": "employee@example.com"
+                                                },
+                                                "phone": {
+                                                    "type": "string",
+                                                    "example": "+201234567890"
+                                                },
+                                                "type": {
+                                                    "type": "string",
+                                                    "example": "مدير"
+                                                },
+                                                "image": {
+                                                    "type": "string",
+                                                    "example": "default.png"
+                                                },
+                                                "is_master": {
+                                                    "type": "integer",
+                                                    "example": 1
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "خطأ في البيانات المدخلة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "لم يتم إنشاء المنظمة بسبب خطأ في البيانات المدخلة"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/login_organization_employee": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "تسجيل دخول موظف",
+                "description": "تسجيل دخول موظف",
+                "operationId": "organizationEmployeeLogin",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "credentials",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "credentials": {
+                                        "type": "string",
+                                        "example": "employee@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تسجيل الدخول بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تسجيل الدخول بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "بيانات الدخول غير صحيحة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "بيانات الدخول غير صحيحة"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "خطأ في التحقق من البيانات",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "خطأ في التحقق من البيانات"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "الحقل البريد الإلكتروني مستخدم مسبقًا"
+                                                ],
+                                                "password": [
+                                                    "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create_organization_employee": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "إنشاء موظف جديد",
+                "description": "إضافة موظف جديد إلى النظام داخل مؤسسة محددة",
+                "operationId": "createOrganizationEmployee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "phone",
+                                    "email",
+                                    "password",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "أحمد محمد"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+201000000000"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "example": "uploads/employees/avatar.jpg",
+                                        "nullable": true
+                                    },
+                                    "type": {
+                                        "description": "1 = Teacher, 2 = Assistant",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "organization_id": {
+                                        "description": "معرّف المؤسسة التي ينتمي إليها الموظف",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "parent_id": {
+                                        "description": "إذا كان مساعدًا تابعًا لمعلم",
+                                        "type": "integer",
+                                        "example": 1,
+                                        "nullable": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "تم إنشاء الموظف بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء المدرس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "بيانات غير صالحة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "بيانات الإدخال غير صالحة"
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": {
+                                                "email": [
+                                                    "الحقل البريد الإلكتروني مستخدم مسبقًا"
+                                                ],
+                                                "password": [
+                                                    "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "AdminResource": {
+                "title": "Admin",
+                "description": "Admin Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ahmed Emad"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "employee@example.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+201234567890"
+                    },
+                    "type": {
+                        "type": "text",
+                        "example": "مدير"
+                    },
+                    "image": {
+                        "type": "text",
+                        "example": "default.png"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "jdsjdfhsdfjbsdbdfjdfbsdfjkfbjsjdh"
+                    }
+                },
+                "type": "object"
+            },
+            "OrganizationEmployeeResource": {
+                "title": "Organization Employee",
+                "description": "Organization Employee Resource",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ahmed Emad"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "employee@example.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+201234567890"
+                    },
+                    "type": {
+                        "type": "text",
+                        "example": "مدير"
+                    },
+                    "image": {
+                        "type": "text",
+                        "example": "default.png"
+                    },
+                    "is_master": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "admin_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "token": {
+                        "type": "string",
+                        "example": "jdsjdfhsdfjbsdbdfjdfbsdfjkfbjsjdh"
+                    }
+                },
+                "type": "object"
+            },
+            "SimpleCreateOrganizationRequest": {
+                "title": "create organization",
+                "description": "CreateOrganizationRequest",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ahmed Emad"
+                    },
+                    "email": {
+                        "type": "string",
+                        "format": "email",
+                        "example": "ahmed@example.com"
+                    },
+                    "type": {
+                        "type": "text",
+                        "example": "1"
+                    },
+                    "phone": {
+                        "type": "integer",
+                        "example": "+201000000000"
+                    },
+                    "image": {
+                        "type": "text",
+                        "format": "url",
+                        "example": "https://example.com/storage/employees/1.png"
+                    },
+                    "max_teachers": {
+                        "type": "integer",
+                        "example": "10"
+                    },
+                    "admin_id": {
+                        "type": "integer",
+                        "example": "1"
+                    },
+                    "teachers": {
+                        "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                    },
+                    "assistants": {
+                        "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "Use bearer token to access this API",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "JWT",
+                "scheme": "bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Organization Admins",
+            "description": "Organization Admins"
+        },
+        {
+            "name": "Organization Employees",
+            "description": "Organization Employees"
+        }
+    ]
+}

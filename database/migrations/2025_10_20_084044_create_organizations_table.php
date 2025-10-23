@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('email')->nullable( );
             $table->text('phone')->nullable();
             $table->string('password')->nullable();
-            $table->unsignedTinyInteger(column: 'type')->default(1)->comment('1 = Teacher, 2 = center')->nullable();
+            $table->unsignedTinyInteger(column: 'type')->default(1)->comment('1 = Organization, 2 = Teacher, 3 = center')->nullable()->comment('1 = Teacher, 2 = center')->nullable();
             $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('cascade');
             $table->text('image')->nullable();
             $table->unsignedInteger('max_teachers')->default(0);

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Http\FormRequest;
 
 class DeleteOrganizationEmployeeDetailsRequest extends FormRequest
 {
+    protected $organization_employee_id;
     /**
      * Determine if the user is authorized to make this request.
      */
@@ -32,7 +33,7 @@ class DeleteOrganizationEmployeeDetailsRequest extends FormRequest
         $validator->after(function ($validator) {
             $organization_employee = OrganizationEmployee::find($this->organization_employee_id);
             if ($organization_employee && $organization_employee->is_master == 1) {
-                $validator->errors()->add('organization_employee_id', 'Organization employee not master');
+                $validator->errors()->add('organization_employee_id', 'Organization employee is master');
             }
         });
     }

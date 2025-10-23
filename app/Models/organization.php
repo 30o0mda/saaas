@@ -26,9 +26,17 @@ class organization extends Model
         return $this->belongsTo(Admin::class);
     }
 
-    public function organization_employe()
+    public function organization_employee()
     {
         return $this->hasMany(OrganizationEmployee::class);
+    }
+
+    public function education_type(){
+        return $this->hasMany(EducationType::class);
+    }
+
+    public function stage(){
+        return $this->hasMany(Stage::class);
     }
 
        protected $casts = [

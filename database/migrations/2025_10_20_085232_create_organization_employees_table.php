@@ -22,7 +22,7 @@ return new class extends Migration
             $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('cascade');
             $table->unsignedTinyInteger(column: 'type')->nullable()->default(1)->comment('1 = Teacher, 2 = assistant');
             $table->boolean(column: 'is_master')->default(0)->comment('1 = active, 0 = inactive')->nullable();
-            $table->foreignId('parent_id')->nullable()->constrained('organization_employees')->onDelete('cascade');
+            $table->foreignId(column: 'parent_id')->nullable()->constrained('organization_employees')->onDelete('cascade');
             $table->timestamps();
         });
     }
