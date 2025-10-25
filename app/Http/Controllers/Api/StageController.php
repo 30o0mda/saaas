@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 
 class StageController extends Controller
 {
+    /////////
     public function createStage(CreateStageRequest $request) {
         $data = $request->validated();
         $data['organization_id'] = auth()->user()->organization_id ?? null;
