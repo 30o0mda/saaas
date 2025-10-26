@@ -50,6 +50,11 @@ protected $table = 'organization_employees';
         return $this->belongsTo(Admin::class);
     }
 
+    public function courses()
+    {
+        return $this->hasMany(Course::class);
+    }
+
        protected $casts = [
         'type' => OrganizationEmployeEnum::class,
         'is_master' => 'boolean',

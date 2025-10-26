@@ -22,7 +22,7 @@ class DeleteStageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stage_id' => 'required|exists:education_types,id',
+            'stage_id' => 'required|exists:stages,id',
         ];
     }
 }

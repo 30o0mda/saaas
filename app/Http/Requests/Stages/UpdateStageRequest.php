@@ -19,7 +19,10 @@ class UpdateStageRequest extends FormRequest
      * Get the validation rules that apply to the request.
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     *
+     *
      */
+
     public function rules(): array
     {
         return [
@@ -28,6 +31,8 @@ class UpdateStageRequest extends FormRequest
             'organization_id' => 'nullable|exists:organizations,id',
             'parent_id' => 'nullable|exists:stages,id',
             'education_type_id' => 'nullable|exists:education_types,id',
+            'subject_ids' => 'nullable|array',
+            'subject_ids.*' => 'exists:subjects,id',
         ];
     }
 }

@@ -5,6 +5,18 @@ namespace App\Http\Resources\Stages;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
+/**
+ * @OA\Schema(
+ *     schema="StageResource",
+ *     type="object",
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="المرحلة الإعدادية"),
+ *     @OA\Property(property="education_type_id", type="integer", example=3),
+ *     @OA\Property(property="organization_id", type="integer", example=5),
+ *     @OA\Property(property="parent_id", type="integer", example=0, nullable=true)
+ * )
+ */
 class StageResource extends JsonResource
 {
     /**

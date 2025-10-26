@@ -7,24 +7,23 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
+
 /**
  * @OA\Schema(
-     * schema="SimpleCreateOrganizationRequest",
-     * type="object",
-     * title="create organization",
-     * description="CreateOrganizationRequest",
-     * @OA\property(property="id" , type="integer" , example="1"),
-     * @OA\property(property="name" , type="string" , example="Ahmed Emad"),
-     * @OA\property(property="email" , type="string" ,format="email" , example="ahmed@example.com"),
-     * @OA\property(property="type" , type="text" , example="1"),
-     * @OA\property(property="phone" , type="integer" , example="+201000000000"),
-     * @OA\property(property="image" , type="text" , format="url" , example="https://example.com/storage/employees/1.png"),
-     * @OA\property(property="max_teachers" , type="integer" , example="10"),
-     * @OA\property(property="admin_id" , type="integer" , example="1"),
-     * @OA\property(property="teachers" , ref="#/components/schemas/OrganizationEmployeeResource"),
-     * @OA\property(property="assistants" , ref="#/components/schemas/OrganizationEmployeeResource"),
-     * )
-     */
+ *     schema="OrganizationResource",
+ *     type="object",
+ *     title="OrganizationEmployeeResource",
+ *     required={"id","name","email","phone","type"},
+ *     @OA\Property(property="id", type="integer", example=1),
+ *     @OA\Property(property="name", type="string", example="أحمد المعلم"),
+ *     @OA\Property(property="email", type="string", format="email", example="teacher@example.com"),
+ *     @OA\Property(property="phone", type="string", example="+201234567890"),
+ *     @OA\Property(property="type", type="string", example="معلم"),
+ *     @OA\Property(property="is_master", type="integer", example=2),
+ *     @OA\Property(property="admin_id", type="integer", example=1)
+ * )
+ */
+
 class OrganizationResource extends JsonResource
 {
     /**

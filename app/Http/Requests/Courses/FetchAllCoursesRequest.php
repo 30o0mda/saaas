@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Stages;
+namespace App\Http\Requests\Courses;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class FetchStageRequest extends FormRequest
+class FetchAllCoursesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,9 @@ class FetchStageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'stage_id' => 'required|exists:stages,id',
+            'word' => 'nullable|string',
+            'with_paginate' => 'nullable|boolean',
+            'limit' => 'nullable|integer',
         ];
     }
 }

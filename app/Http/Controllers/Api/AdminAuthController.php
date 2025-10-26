@@ -11,8 +11,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 /**
  * @OA\Tag(
- *     name="Organization - Employees",
- *     description="Endpoints for managing organization employees (إنشاء وتحديث وحذف واستعراض الموظفين)"
+ *     name="Admin",
+ *     description="Operations related to admin"
  * )
  */
 class AdminAuthController extends Controller
@@ -22,7 +22,7 @@ class AdminAuthController extends Controller
      *
      * @OA\Post(
      *     path="/admin/login",
-     *     tags={"Organization Admins"},
+     *     tags={"Admin"},
      *     summary="تسجيل الدخول",
      *     description="تسجيل الدخول للادمن",
      *     security={{"bearerAuth":{}}},

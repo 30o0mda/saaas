@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\Api\AdminAuthController;
+use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EducationTypeController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationEmployeeController;
 use App\Http\Controllers\Api\StageController;
+use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TeacherController;
 use App\Models\EducationType;
 use GuzzleHttp\Middleware;
@@ -50,4 +52,19 @@ Route::middleware(['auth:organization','check_if_master'])->group(function () {
     Route::post('/update_stage', [StageController::class, 'updateStage']);
     Route::post('/fetch_stages', [StageController::class, 'fetchStages']);
     Route::post('/delete_stage', [StageController::class, 'deleteStage']);
+
+    //subject
+    Route::post('/create_subject', [SubjectController::class, 'createSubject']);
+    Route::post('/update_subject', [SubjectController::class, 'updateSubject']);
+    Route::post('/fetch_subjects', [SubjectController::class, 'fetchSubjects']);
+    Route::post('/delete_subject', [SubjectController::class, 'deleteSubject']);
+
+    // Courses
+    Route::post('/create_course', [CourseController::class, 'createCourse']);
+    Route::post('/update_course', [CourseController::class, 'updateCourse']);
+    Route::post('/fetch_course_details', [CourseController::class, 'fetchCourseDetails']);
+    Route::post('/delete_course', [CourseController::class, 'deleteCourse']);
+    Route::post('/is_active', [CourseController::class, 'isActive']);
+    Route::post('/order_course', [CourseController::class, 'orderCourse']);
+    Route::post('/fetch_all_courses', [CourseController::class, 'fetchAllCourses']);
 });

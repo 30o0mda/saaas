@@ -35,4 +35,15 @@ class stage extends Model
     {
         return $this->belongsTo(EducationType::class);
     }
+
+    public function stage_and_subjects()
+    {
+        return $this->hasMany(StageAndSubject::class);
+    }
+
+
+public function subjects()
+    {
+        return $this->belongsToMany(Subject::class, 'stage_and_subjects', 'stage_id', 'subject_id');
+    }
 }

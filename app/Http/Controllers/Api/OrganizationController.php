@@ -12,63 +12,44 @@ use App\Models\organization;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
+
 /**
  * @OA\Tag(
- *     name="Organization - Employees",
- *     description="Endpoints for managing organization  (إاتنشاء وتحديث وحذف واستعراض المنظمه)"
+ *     name="Organizations",
+ *     description="Endpoints for managing organizations"
  * )
  */
 class OrganizationController extends Controller
 {
+    /**
+     * @OA\Post(
+     *     path="/create_organization",
+     *     summary="إنشاء منظمة جديدة",
+     *     tags={"Organizations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\JsonContent(
+     *             required={"name","phone","email","type"},
+     *             @OA\Property(property="name", type="string", example="مدرسة النور"),
+     *             @OA\Property(property="phone", type="string", example="+201234567890"),
+     *             @OA\Property(property="email", type="string", format="email", example="info@school.com"),
+     *             @OA\Property(property="type", type="string", example="مدير"),
+     *             @OA\Property(property="is_master", type="integer", example=1)
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="تم إنشاء المنظمة بنجاح",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="تم إنشاء المنظمة بنجاح"),
+     *             @OA\Property(property="organization", ref="#/components/schemas/OrganizationResource")
+     *         )
+     *     )
+     * )
+     */
 
-/**
- * @OA\Post(
- *     path="/create_organization",
- *     summary="إنشاء منظمة",
- *     description="إنشاء منظمة جديدة باستخدام البيانات المدخلة",
- *     tags={"Organization Admins"},
- *     security={{"bearerAuth":{}}},
- *     @OA\RequestBody(
- *         required=true,
- *         @OA\JsonContent(
- *             required={"name","phone","email","type","is_master"},
- *             @OA\Property(property="name", type="string", example="اسم المنظمة"),
- *             @OA\Property(property="phone", type="string", example="+201234567890"),
- *             @OA\Property(property="email", type="string", format="email", example="employee@example.com"),
- *             @OA\Property(property="type", type="string", example="مدير"),
- *             @OA\Property(property="is_master", type="integer", example=1),
- *             @OA\Property(property="admin_id", type="integer", example=1)
- *         )
- *     ),
- *     @OA\Response(
- *         response=201,
- *         description="تم إنشاء المنظمة بنجاح",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=true),
- *             @OA\Property(property="message", type="string", example="تم إنشاء المنظمة بنجاح"),
- *             @OA\Property(
- *                 property="data",
- *                 type="object",
- *                 @OA\Property(property="id", type="integer", example=1),
- *                 @OA\Property(property="name", type="string", example="Ahmed Emad"),
- *                 @OA\Property(property="email", type="string", format="email", example="employee@example.com"),
- *                 @OA\Property(property="phone", type="string", example="+201234567890"),
- *                 @OA\Property(property="type", type="string", example="مدير"),
- *                 @OA\Property(property="image", type="string", example="default.png"),
- *                 @OA\Property(property="is_master", type="integer", example=1)
- *             )
- *         )
- *     ),
- *     @OA\Response(
- *         response=400,
- *         description="خطأ في البيانات المدخلة",
- *         @OA\JsonContent(
- *             @OA\Property(property="status", type="boolean", example=false),
- *             @OA\Property(property="message", type="string", example="لم يتم إنشاء المنظمة بسبب خطأ في البيانات المدخلة")
- *         )
- *     )
- * )
- */
 
     public function createOrganization(CreateOrganizationRequest $request)
     {
@@ -98,6 +79,28 @@ class OrganizationController extends Controller
             'organization' => new OrganizationResource($organization),
         ]);
     }
+
+       /**
+     * @OA\Get(
+     *     path="/get_organizations",
+     *     summary="جلب كل المنظمات",
+     *     tags={"Organizations"},
+     *     security={{"bearerAuth":{}}},
+     *     @OA\Response(
+     *         response=200,
+     *         description="تم جلب المنظمات بنجاح",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="status", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="تم جلب المنظمات بنجاح"),
+     *             @OA\Property(
+     *                 property="organization",
+     *                 type="array",
+     *                 @OA\Items(ref="#/components/schemas/OrganizationResource")
+     *             )
+     *         )
+     *     )
+     * )
+     */
 
     public function getOrganizations()
     {

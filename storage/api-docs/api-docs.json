@@ -14,7 +14,7 @@
         "/admin/login": {
             "post": {
                 "tags": [
-                    "Organization Admins"
+                    "Admin"
                 ],
                 "summary": "تسجيل الدخول",
                 "description": "تسجيل الدخول للادمن",
@@ -106,13 +106,718 @@
                 ]
             }
         },
+        "/create_course": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "إنشاء كورس جديد",
+                "operationId": "createCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description",
+                                    "stage_and_subject_id",
+                                    "price",
+                                    "is_free"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Mathematics 101"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Basic Math course for beginners"
+                                    },
+                                    "stage_and_subject_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 100.5
+                                    },
+                                    "is_free": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم إنشاء الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/update_course": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "تحديث بيانات كورس",
+                "operationId": "updateCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "Updated Course Name"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "Updated description"
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "stage_and_subject_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "price": {
+                                        "type": "number",
+                                        "format": "float",
+                                        "example": 120.5
+                                    },
+                                    "is_free": {
+                                        "type": "boolean",
+                                        "example": false
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تحديث الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_course_details": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "جلب تفاصيل كورس محدد",
+                "operationId": "fetchCourseDetails",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete_course": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "حذف كورس",
+                "operationId": "deleteCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم حذف الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم حذف الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/is_active": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "تغيير حالة التفعيل لكورس",
+                "operationId": "toggleCourseActive",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تغيير حالة الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تغيير حالة الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order_course": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "تغيير ترتيب الكورس",
+                "operationId": "orderCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id",
+                                    "order"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تغيير ترتيب الكورس بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تغيير ترتيب الكورس بنجاح"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/CourseResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_all_courses": {
+            "post": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "جلب جميع الكورسات",
+                "operationId": "fetchAllCourses",
+                "parameters": [
+                    {
+                        "name": "word",
+                        "in": "query",
+                        "description": "للبحث باسم الكورس",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "with_paginate",
+                        "in": "query",
+                        "description": "تفعيل أو إيقاف pagination (1 أو 0)",
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "عدد النتائج لكل صفحة في حالة pagination",
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب جميع الكورسات بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب جميع الكورسات بنجاح"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/CourseResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create_education_type": {
+            "post": {
+                "tags": [
+                    "Education Types"
+                ],
+                "summary": "إنشاء نوع تعليم جديد",
+                "operationId": "7c6ae6b4ff19df23c12c5b0cfa19361a",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "تعليم أساسي"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "وصف النوع"
+                                    },
+                                    "is_active": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء نوع التعليم بنجاح"
+                                        },
+                                        "education_type": {
+                                            "$ref": "#/components/schemas/EducationTypeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "خطأ في التحقق من البيانات",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "حدث خطأ، البيانات غير صالحة"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/update_education_type": {
+            "post": {
+                "tags": [
+                    "Education Types"
+                ],
+                "summary": "تحديث نوع تعليم",
+                "operationId": "cf178f8e0b462facd7b1e0af71a7e97c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "education_type_id"
+                                ],
+                                "properties": {
+                                    "education_type_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "تعليم ثانوي"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "وصف النوع"
+                                    },
+                                    "is_active": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث نوع التعليم بنجاح"
+                                        },
+                                        "education_type": {
+                                            "$ref": "#/components/schemas/EducationTypeResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "نوع التعليم غير موجود",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "نوع التعليم غير موجود"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_education_types": {
+            "get": {
+                "tags": [
+                    "Education Types"
+                ],
+                "summary": "جلب كل أنواع التعليم",
+                "operationId": "5e77caa13a87a475f454d74d8ba81620",
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب أنواع التعليم بنجاح"
+                                        },
+                                        "education_types": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/EducationTypeResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete_education_type": {
+            "post": {
+                "tags": [
+                    "Education Types"
+                ],
+                "summary": "حذف نوع تعليم",
+                "operationId": "fb4924d0d7264e126c3294c2ac2f601e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "education_type_id"
+                                ],
+                                "properties": {
+                                    "education_type_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم حذف نوع التعليم بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "نوع التعليم غير موجود",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "نوع التعليم غير موجود"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/create_organization": {
             "post": {
                 "tags": [
-                    "Organization Admins"
+                    "Organizations"
                 ],
-                "summary": "إنشاء منظمة",
-                "description": "إنشاء منظمة جديدة باستخدام البيانات المدخلة",
+                "summary": "إنشاء منظمة جديدة",
                 "operationId": "c9b57245d469825cd739e417b4de6085",
                 "requestBody": {
                     "required": true,
@@ -123,13 +828,12 @@
                                     "name",
                                     "phone",
                                     "email",
-                                    "type",
-                                    "is_master"
+                                    "type"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "اسم المنظمة"
+                                        "example": "مدرسة النور"
                                     },
                                     "phone": {
                                         "type": "string",
@@ -138,17 +842,13 @@
                                     "email": {
                                         "type": "string",
                                         "format": "email",
-                                        "example": "employee@example.com"
+                                        "example": "info@school.com"
                                     },
                                     "type": {
                                         "type": "string",
                                         "example": "مدير"
                                     },
                                     "is_master": {
-                                        "type": "integer",
-                                        "example": 1
-                                    },
-                                    "admin_id": {
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -173,59 +873,8 @@
                                             "type": "string",
                                             "example": "تم إنشاء المنظمة بنجاح"
                                         },
-                                        "data": {
-                                            "properties": {
-                                                "id": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                },
-                                                "name": {
-                                                    "type": "string",
-                                                    "example": "Ahmed Emad"
-                                                },
-                                                "email": {
-                                                    "type": "string",
-                                                    "format": "email",
-                                                    "example": "employee@example.com"
-                                                },
-                                                "phone": {
-                                                    "type": "string",
-                                                    "example": "+201234567890"
-                                                },
-                                                "type": {
-                                                    "type": "string",
-                                                    "example": "مدير"
-                                                },
-                                                "image": {
-                                                    "type": "string",
-                                                    "example": "default.png"
-                                                },
-                                                "is_master": {
-                                                    "type": "integer",
-                                                    "example": 1
-                                                }
-                                            },
-                                            "type": "object"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "خطأ في البيانات المدخلة",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "لم يتم إنشاء المنظمة بسبب خطأ في البيانات المدخلة"
+                                        "organization": {
+                                            "$ref": "#/components/schemas/OrganizationResource"
                                         }
                                     },
                                     "type": "object"
@@ -241,13 +890,55 @@
                 ]
             }
         },
-        "/login_organization_employee": {
+        "/get_organizations": {
+            "get": {
+                "tags": [
+                    "Organizations"
+                ],
+                "summary": "جلب كل المنظمات",
+                "operationId": "29c12a92b2e11dc0664ddab3511d2c5e",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب المنظمات بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب المنظمات بنجاح"
+                                        },
+                                        "organization": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/OrganizationResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/login_organization_employee": {
             "post": {
                 "tags": [
                     "Organization Employees"
                 ],
                 "summary": "تسجيل دخول موظف",
-                "description": "تسجيل دخول موظف",
+                "description": "يسمح لموظف المؤسسة بتسجيل الدخول باستخدام البريد الإلكتروني أو رقم الهاتف.",
                 "operationId": "organizationEmployeeLogin",
                 "requestBody": {
                     "required": true,
@@ -279,20 +970,7 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "تم تسجيل الدخول بنجاح"
-                                        },
-                                        "data": {
-                                            "$ref": "#/components/schemas/OrganizationEmployeeResource"
-                                        }
-                                    },
-                                    "type": "object"
+                                    "$ref": "#/components/schemas/OrganizationEmployeeResource"
                                 }
                             }
                         }
@@ -316,48 +994,17 @@
                                 }
                             }
                         }
-                    },
-                    "422": {
-                        "description": "خطأ في التحقق من البيانات",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": false
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "خطأ في التحقق من البيانات"
-                                        },
-                                        "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "email": [
-                                                    "الحقل البريد الإلكتروني مستخدم مسبقًا"
-                                                ],
-                                                "password": [
-                                                    "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل"
-                                                ]
-                                            }
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
                     }
                 }
             }
         },
-        "/create_organization_employee": {
+        "/api/create_organization_employee": {
             "post": {
                 "tags": [
                     "Organization Employees"
                 ],
                 "summary": "إنشاء موظف جديد",
-                "description": "إضافة موظف جديد إلى النظام داخل مؤسسة محددة",
+                "description": "إضافة موظف جديد إلى النظام داخل مؤسسة محددة.",
                 "operationId": "createOrganizationEmployee",
                 "requestBody": {
                     "required": true,
@@ -369,7 +1016,8 @@
                                     "phone",
                                     "email",
                                     "password",
-                                    "type"
+                                    "type",
+                                    "organization_id"
                                 ],
                                 "properties": {
                                     "name": {
@@ -399,14 +1047,12 @@
                                         "example": 1
                                     },
                                     "organization_id": {
-                                        "description": "معرّف المؤسسة التي ينتمي إليها الموظف",
                                         "type": "integer",
                                         "example": 1
                                     },
                                     "parent_id": {
-                                        "description": "إذا كان مساعدًا تابعًا لمعلم",
                                         "type": "integer",
-                                        "example": 1,
+                                        "example": 2,
                                         "nullable": true
                                     }
                                 },
@@ -421,17 +1067,241 @@
                         "content": {
                             "application/json": {
                                 "schema": {
+                                    "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "بيانات غير صالحة"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/update_organization_employee": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "تحديث بيانات موظف",
+                "operationId": "updateOrganizationEmployee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "organization_employee_id"
+                                ],
+                                "properties": {
+                                    "organization_employee_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "type": "string",
+                                        "example": "محمد علي"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "m.ali@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "+201000111222"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تحديث الموظف بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "الموظف غير موجود"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fetch_organization_employees": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "عرض جميع الموظفين حسب النوع",
+                "description": "جلب جميع الموظفين من نوع معين (مدرسين أو مساعدين).",
+                "operationId": "fetchOrganizationEmployees",
+                "parameters": [
+                    {
+                        "name": "type",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الموظفين بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/fetch_organization_employee_details": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "عرض تفاصيل موظف",
+                "description": "عرض بيانات موظف محدد من خلال معرفه.",
+                "operationId": "fetchOrganizationEmployeeDetails",
+                "parameters": [
+                    {
+                        "name": "organization_employee_id",
+                        "in": "query",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب بيانات الموظف بنجاح"
+                    },
+                    "404": {
+                        "description": "الموظف غير موجود"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/api/delete_organization_employee": {
+            "post": {
+                "tags": [
+                    "Organization Employees"
+                ],
+                "summary": "حذف موظف",
+                "description": "حذف موظف من النظام باستخدام المعرّف الخاص به.",
+                "operationId": "deleteOrganizationEmployee",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "organization_employee_id"
+                                ],
+                                "properties": {
+                                    "organization_employee_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم حذف الموظف بنجاح"
+                    },
+                    "404": {
+                        "description": "الموظف غير موجود"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/create_stage": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "إنشاء مرحلة جديدة",
+                "operationId": "5506135e7544376e11e79ef7f18bcfa7",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "education_type_id"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "المرحلة الإعدادية"
+                                    },
+                                    "education_type_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": null
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
                                     "properties": {
-                                        "status": {
+                                        "success": {
                                             "type": "boolean",
                                             "example": true
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "تم إنشاء المدرس بنجاح"
+                                            "example": "تم إنشاء المرحلة بنجاح"
                                         },
-                                        "data": {
-                                            "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                                        "stage": {
+                                            "$ref": "#/components/schemas/StageResource"
                                         }
                                     },
                                     "type": "object"
@@ -440,29 +1310,21 @@
                         }
                     },
                     "422": {
-                        "description": "بيانات غير صالحة",
+                        "description": "خطأ في التحقق من البيانات",
                         "content": {
                             "application/json": {
                                 "schema": {
                                     "properties": {
-                                        "status": {
+                                        "success": {
                                             "type": "boolean",
                                             "example": false
                                         },
                                         "message": {
                                             "type": "string",
-                                            "example": "بيانات الإدخال غير صالحة"
+                                            "example": "حدث خطأ، البيانات غير صالحة"
                                         },
                                         "errors": {
-                                            "type": "object",
-                                            "example": {
-                                                "email": [
-                                                    "الحقل البريد الإلكتروني مستخدم مسبقًا"
-                                                ],
-                                                "password": [
-                                                    "كلمة المرور يجب أن تحتوي على 8 أحرف على الأقل"
-                                                ]
-                                            }
+                                            "type": "object"
                                         }
                                     },
                                     "type": "object"
@@ -470,12 +1332,462 @@
                             }
                         }
                     }
-                },
-                "security": [
+                }
+            }
+        },
+        "/update_stage": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "تحديث مرحلة",
+                "operationId": "795d30f1c92a03c9bfe44de18276dc10",
+                "parameters": [
                     {
-                        "bearerAuth": []
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID الخاص بالمرحلة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
                     }
-                ]
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "المرحلة الثانوية"
+                                    },
+                                    "education_type_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": null
+                                    },
+                                    "subject_ids": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "integer"
+                                        },
+                                        "example": [
+                                            1,
+                                            2
+                                        ]
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث المرحلة بنجاح"
+                                        },
+                                        "stage": {
+                                            "$ref": "#/components/schemas/StageResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "خطأ في التحقق من البيانات",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "حدث خطأ، البيانات غير صالحة"
+                                        },
+                                        "errors": {
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_stage": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "جلب مرحلة معينة",
+                "operationId": "4046446117972b9068dca2c7e03baeaf",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب المرحلة بنجاح"
+                                        },
+                                        "stage": {
+                                            "$ref": "#/components/schemas/StageResource"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "المرحلة غير موجودة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "المرحلة غير موجودة"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete_stage": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "حذف مرحلة",
+                "operationId": "085c7b5950abb5806eb2e3ddddb4c52e",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "نجاح العملية",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم حذف المرحلة بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "المرحلة غير موجودة",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "المرحلة غير موجودة"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/create_subject": {
+            "post": {
+                "tags": [
+                    "Subjects"
+                ],
+                "summary": "إنشاء موضوع جديد",
+                "operationId": "4759156fa124524b9f43906cadf1344e",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "description"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "الرياضيات"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "موضوع دراسي للمرحلة الإعدادية"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم إنشاء الموضوع بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إنشاء الموضوع بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "subject": {
+                                                    "$ref": "#/components/schemas/SubjectResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/update_subject": {
+            "post": {
+                "tags": [
+                    "Subjects"
+                ],
+                "summary": "تحديث موضوع موجود",
+                "operationId": "c418d68d8c709f6b4d6d54563141b871",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "الرياضيات"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "موضوع محدث"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تحديث الموضوع بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث الموضوع بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "subject": {
+                                                    "$ref": "#/components/schemas/SubjectResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_subject": {
+            "post": {
+                "tags": [
+                    "Subjects"
+                ],
+                "summary": "جلب موضوع محدد",
+                "operationId": "4bf282b6c1707fa02b6081b5b2fb8c5f",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الموضوع بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب الموضوع بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "subject": {
+                                                    "$ref": "#/components/schemas/SubjectResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete_subject": {
+            "post": {
+                "tags": [
+                    "Subjects"
+                ],
+                "summary": "حذف موضوع",
+                "operationId": "aafb4cbe91064005d5123079b28ea10a",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم حذف الموضوع بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم حذف الموضوع بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
@@ -513,6 +1825,73 @@
                     "token": {
                         "type": "string",
                         "example": "jdsjdfhsdfjbsdbdfjdfbsdfjkfbjsjdh"
+                    }
+                },
+                "type": "object"
+            },
+            "CourseResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Mathematics 101"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Basic Math course"
+                    },
+                    "order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "stage_and_subject_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "price": {
+                        "type": "number",
+                        "format": "float",
+                        "example": 100.5
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "is_free": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "EducationTypeResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "رياضيات"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "دروس تعليمية للمرحلة الإعدادية"
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
                     }
                 },
                 "type": "object"
@@ -569,49 +1948,87 @@
                 },
                 "type": "object"
             },
-            "SimpleCreateOrganizationRequest": {
-                "title": "create organization",
-                "description": "CreateOrganizationRequest",
+            "OrganizationResource": {
+                "title": "OrganizationEmployeeResource",
+                "required": [
+                    "id",
+                    "name",
+                    "email",
+                    "phone",
+                    "type"
+                ],
                 "properties": {
                     "id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
                     },
                     "name": {
                         "type": "string",
-                        "example": "Ahmed Emad"
+                        "example": "أحمد المعلم"
                     },
                     "email": {
                         "type": "string",
                         "format": "email",
-                        "example": "ahmed@example.com"
-                    },
-                    "type": {
-                        "type": "text",
-                        "example": "1"
+                        "example": "teacher@example.com"
                     },
                     "phone": {
-                        "type": "integer",
-                        "example": "+201000000000"
+                        "type": "string",
+                        "example": "+201234567890"
                     },
-                    "image": {
-                        "type": "text",
-                        "format": "url",
-                        "example": "https://example.com/storage/employees/1.png"
+                    "type": {
+                        "type": "string",
+                        "example": "معلم"
                     },
-                    "max_teachers": {
+                    "is_master": {
                         "type": "integer",
-                        "example": "10"
+                        "example": 2
                     },
                     "admin_id": {
                         "type": "integer",
-                        "example": "1"
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "StageResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
                     },
-                    "teachers": {
-                        "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                    "name": {
+                        "type": "string",
+                        "example": "المرحلة الإعدادية"
                     },
-                    "assistants": {
-                        "$ref": "#/components/schemas/OrganizationEmployeeResource"
+                    "education_type_id": {
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "example": 0,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "SubjectResource": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "الرياضيات"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "موضوع دراسي للمرحلة الإعدادية"
                     }
                 },
                 "type": "object"
@@ -630,12 +2047,32 @@
     },
     "tags": [
         {
-            "name": "Organization Admins",
-            "description": "Organization Admins"
+            "name": "Admin",
+            "description": "Operations related to admin"
+        },
+        {
+            "name": "Courses",
+            "description": "Operations related to courses"
+        },
+        {
+            "name": "Education Types",
+            "description": "Operations related to education types"
+        },
+        {
+            "name": "Organizations",
+            "description": "Endpoints for managing organizations"
         },
         {
             "name": "Organization Employees",
-            "description": "Organization Employees"
+            "description": "Endpoints for managing organization employees (إنشاء وتحديث وحذف واستعراض الموظفين)"
+        },
+        {
+            "name": "Stages",
+            "description": "Operations related to stages"
+        },
+        {
+            "name": "Subjects",
+            "description": "Subjects"
         }
     ]
 }

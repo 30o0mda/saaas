@@ -39,6 +39,14 @@ class organization extends Model
         return $this->hasMany(Stage::class);
     }
 
+    public function subject(){
+        return $this->hasMany(Subject::class);
+    }
+
+    public function course(){
+        return $this->hasMany(Course::class);
+    }
+
        protected $casts = [
         'type' => OrganizationEnum::class,
     ];
