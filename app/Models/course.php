@@ -37,5 +37,14 @@ class course extends Model
         return $this->belongsTo(OrganizationEmployee::class);
     }
 
-    
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+
+    public function parent_sessions(){
+        return $this->sessions()->whereNull('parent_id');
+    }
+
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Courses;
 
+use App\Http\Resources\Sessions\SessionResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -42,5 +43,6 @@ class CourseResource extends JsonResource
             'is_active' => $this->is_active ?? false,
             'is_free' => $this->is_free ?? false,
             'organization_id' => $this->organization_id ?? null,
+            'sessions' => SessionResource::collection($this?->parent_sessions)??[],
         ];}
 }

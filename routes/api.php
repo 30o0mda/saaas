@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\EducationTypeController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationEmployeeController;
+use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StageController;
 use App\Http\Controllers\Api\SubjectController;
 use App\Http\Controllers\Api\TeacherController;
@@ -67,4 +68,13 @@ Route::middleware(['auth:organization','check_if_master'])->group(function () {
     Route::post('/is_active', [CourseController::class, 'isActive']);
     Route::post('/order_course', [CourseController::class, 'orderCourse']);
     Route::post('/fetch_all_courses', [CourseController::class, 'fetchAllCourses']);
+
+    // Sessions
+    Route::post('/create_session', [SessionController::class, 'createSession']);
+    Route::post('/update_session', [SessionController::class, 'updateSession']);
+    Route::post('/fetch_session_details', [SessionController::class, 'fetchSessionDetails']);
+    Route::post('/delete_session', [SessionController::class, 'deleteSession']);
+    Route::post('/is_active_session', [SessionController::class, 'isActiveSession']);
+    Route::post('/order_session', [SessionController::class, 'orderSession']);
+    Route::post('/fetch_all_sessions', [SessionController::class, 'fetchAllSessions']);
 });

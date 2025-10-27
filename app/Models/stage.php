@@ -40,8 +40,6 @@ class stage extends Model
     {
         return $this->hasMany(StageAndSubject::class);
     }
-
-
 public function subjects()
     {
         return $this->belongsToMany(Subject::class, 'stage_and_subjects', 'stage_id', 'subject_id');

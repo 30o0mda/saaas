@@ -1250,6 +1250,464 @@
                 ]
             }
         },
+        "/create_session": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "إنشاء جلسة جديدة",
+                "operationId": "95ba9972148bb565c4d9fc5128aa1922",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "جلسة 1"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "example": "تفاصيل الجلسة"
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": null,
+                                        "nullable": true
+                                    },
+                                    "type": {
+                                        "type": "string",
+                                        "example": "video"
+                                    },
+                                    "link": {
+                                        "type": "string",
+                                        "example": "https://link.com"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "example": "file.pdf"
+                                    },
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "is_active": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم إضافة الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم إضافة الجلسة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "session": {
+                                                    "$ref": "#/components/schemas/Session"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/update_session": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "تحديث جلسة موجودة",
+                "operationId": "fa348eb0cfb5166ec818f18be8b5a28d",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "description": "معرف الجلسة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "nullable": true
+                                    },
+                                    "type": {
+                                        "type": "string"
+                                    },
+                                    "link": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string"
+                                    },
+                                    "course_id": {
+                                        "type": "integer"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تحديث الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تحديث الجلسة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "session": {
+                                                    "$ref": "#/components/schemas/Session"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_session_details": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "جلب تفاصيل الجلسة",
+                "operationId": "5ac6644dde8976137cd549766755c8c2",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "description": "معرف الجلسة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب الجلسة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "session": {
+                                                    "$ref": "#/components/schemas/Session"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/delete_session": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "حذف جلسة",
+                "operationId": "ca569398775e600aaed5e8c52f98cee4",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "description": "معرف الجلسة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم حذف الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم حذف الجلسة بنجاح"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/is_active_session": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "تفعيل/تعطيل الجلسة",
+                "operationId": "95c81ab1a922fcb07550efbcf3b70b25",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "description": "معرف الجلسة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم تغيير حالة الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تغيير حالة الجلسة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "session": {
+                                                    "$ref": "#/components/schemas/Session"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/order_session": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "تغيير ترتيب الجلسة",
+                "operationId": "fe99384f4bf2a19ce309734a019518c2",
+                "parameters": [
+                    {
+                        "name": "session_id",
+                        "in": "path",
+                        "description": "معرف الجلسة",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "order"
+                                ],
+                                "properties": {
+                                    "order": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تغيير ترتيب الجلسة بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تغيير ترتيب الجلسة بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "session": {
+                                                    "$ref": "#/components/schemas/Session"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/fetch_all_sessions": {
+            "post": {
+                "tags": [
+                    "Sessions"
+                ],
+                "summary": "جلب جميع الجلسات",
+                "operationId": "146033f6d8696988c5d7b9b4281c42ca",
+                "parameters": [
+                    {
+                        "name": "course_id",
+                        "in": "query",
+                        "description": "معرف الكورس",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "word",
+                        "in": "query",
+                        "description": "للبحث في اسم الجلسة",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "with_paginate",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "boolean",
+                            "example": 1
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "example": 10
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "تم جلب جميع الجلسات بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب جميع الجلسات بنجاح"
+                                        },
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/Session"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
         "/create_stage": {
             "post": {
                 "tags": [
@@ -1990,6 +2448,58 @@
                 },
                 "type": "object"
             },
+            "Session": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "aaa"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "ddd"
+                    },
+                    "course_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "parent_id": {
+                        "type": "integer",
+                        "example": null,
+                        "nullable": true
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "ddd"
+                    },
+                    "file": {
+                        "type": "string",
+                        "example": "ddd"
+                    },
+                    "order": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "is_active": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "فيديو"
+                    },
+                    "children": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Session"
+                        }
+                    }
+                },
+                "type": "object"
+            },
             "StageResource": {
                 "properties": {
                     "id": {
@@ -2065,6 +2575,10 @@
         {
             "name": "Organization Employees",
             "description": "Endpoints for managing organization employees (إنشاء وتحديث وحذف واستعراض الموظفين)"
+        },
+        {
+            "name": "Sessions",
+            "description": "API Endpoints for Sessions Management"
         },
         {
             "name": "Stages",
