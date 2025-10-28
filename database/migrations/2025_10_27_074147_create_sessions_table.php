@@ -22,6 +22,8 @@ return new class extends Migration {
             $table->integer('order');
             $table->boolean(column: 'is_active')->default(1)->comment('1 = active, 0 = inactive')->nullable();
             $table->unsignedTinyInteger(column: 'type')->nullable()->default(1)->comment('1 = video, 2 = audio , 3 = pdf');
+            $table->foreignId('organization_employees_id')->nullable()->constrained('organization_employees')->onDelete('cascade');
+
             $table->timestamps();
         });
     }

@@ -49,6 +49,13 @@ return [
             'driver' => 'sanctum', // أو 'session' إذا كان الحارس مخصص لتسجيل الدخول التقليدي
             'provider' => 'organizations', // لازم يكون موجود تحت 'providers'
         ],
+
+        'user' => [ // 👈 ده الجارد الجديد
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+
+
     ],
 
     /*
@@ -83,11 +90,6 @@ return [
             'driver' => 'eloquent',
             'model' => App\Models\OrganizationEmployee::class, // تأكد من أن هذا الموديل موجود فعلاً
         ],
-
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
     ],
 
     /*

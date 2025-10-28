@@ -44,4 +44,13 @@ public function subjects()
     {
         return $this->belongsToMany(Subject::class, 'stage_and_subjects', 'stage_id', 'subject_id');
     }
+
+    public function sessions()
+    {
+        return $this->hasMany(Session::class);
+    }
+
+    public function user(){
+        return $this->hasMany(User::class);
+    }
 }

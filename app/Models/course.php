@@ -24,7 +24,7 @@ class course extends Model
 
     public function stageAndSubject()
     {
-        return $this->belongsTo(StageAndSubject::class);
+        return $this->belongsTo(StageAndSubject::class,'stage_and_subject_id');
     }
 
     public function organization()
@@ -45,6 +45,13 @@ class course extends Model
 
     public function parent_sessions(){
         return $this->sessions()->whereNull('parent_id');
+    }
+
+    public function stages(){
+        return $this->belongsTo(Stage::class);
+    }
+    public function subjects(){
+        return $this->hasManyThrough(Subject::class, Stage::class);
     }
 
 }
