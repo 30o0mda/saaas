@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Users;
+namespace App\Http\Requests\JoinCourse;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserRegisterRequest extends FormRequest
+class ShowJoinCourseDetailsRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,12 +22,7 @@ class UserRegisterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'phone' => 'required|string|unique:users,phone',
-            'country_code' => 'required|string',
-            'password' => 'required|string|min:8',
-            'organization_id' => 'required|exists:organizations,id',
+            'course_id' => 'required|exists:courses,id',
         ];
     }
 }

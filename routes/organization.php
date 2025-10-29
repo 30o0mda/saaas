@@ -2,7 +2,10 @@
 
 use App\Http\Controllers\Api\AdminAuthController;
 use App\Http\Controllers\Api\CourseController;
+use App\Http\Controllers\Api\CourseOFUserController;
+use App\Http\Controllers\Api\CourseUserController;
 use App\Http\Controllers\Api\EducationTypeController;
+use App\Http\Controllers\Api\JoinCourseController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationEmployeeController;
 use App\Http\Controllers\Api\SessionController;
@@ -69,6 +72,13 @@ Route::prefix('organization')->group(function () {
         Route::post('/is_active_session', [SessionController::class, 'isActiveSession']);
         Route::post('/order_session', [SessionController::class, 'orderSession']);
         Route::post('/fetch_all_sessions', [SessionController::class, 'fetchAllSessions']);
+
+        // join courses
+        Route::get('/fetch_join_courses', [JoinCourseController::class, 'fetchJoinCourses']);
+        Route::post('/show_join_course', [JoinCourseController::class, 'showJoinCourse']);
+        Route::post('/status_join_course', [JoinCourseController::class, 'statusJoinCourse']);
+        Route::post('/accept_join_course', [CourseUserController::class, 'acceptJoinCourse']);
+        Route::post('/reject_join_course', [CourseUserController::class, 'rejectJoinCourse']);
     });
 });
 

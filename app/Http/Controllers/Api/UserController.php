@@ -33,11 +33,11 @@ class UserController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'country_code' => $data['country_code'],
-            'type' => UserEnum::from($data['type'])->value,
-            'parent_name' => $data['parent_name'],
-            'parent_phone' => $data['parent_phone'],
+            // 'type' => UserEnum::from($data['type'])->value,
+            // 'parent_name' => $data['parent_name'],
+            // 'parent_phone' => $data['parent_phone'],
             'organization_id' => $data['organization_id'],
-            'image' => $data['image'],
+            // 'image' => $data['image'],
         ]);
         return ApiResponseHelper::response(true, 'تم التسجيل بنجاح', [
             'user' => new UserResource($user),
@@ -52,9 +52,6 @@ class UserController extends Controller
             : User::where('phone', $credentials)->first();
         if (!$user || !Hash::check($data['password'], $user->password)) {
             return ApiResponseHelper::response(false, 'البريد الالكتروني او رقم الجوال غير صحيح');
-        }
-        if (!$user->hasVerifiedEmail()) {
-            return ApiResponseHelper::response(false, 'من فضلك تحقق من بريدك الإلكتروني');
         }
         $token = $user->createToken('user-token')->plainTextToken;
         $user['api_token'] = $token;

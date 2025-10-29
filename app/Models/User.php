@@ -42,6 +42,18 @@ class User extends Authenticatable
         return $this->belongsTo(Stage::class);
     }
 
+    public function courses(){
+        return $this->belongsToMany(Course::class, 'join_courses', 'user_id', 'course_id');
+    }
+
+    public function courseUsers(){
+        return $this->hasMany(CourseUser::class);
+    }
+
+    public function userCourses(){
+        return $this->hasManyThrough(course::class , CourseUser::class , 'user_id', 'id', 'id', 'course_id');
+    }
+
      protected $casts = [
         'type' => UserEnum::class,
     ];

@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'parent_phone' => $this->parent_email ?? null,
             'organization_id' => $this->organization_id ?? null,
             'image' => $this->image ?? null,
-            'type' => $this->type->label(),
+            'type' => $this->type->value ?? null,
             'country_code' => $this->country_code ?? null,
             'is_verified' => $this->is_verified ?? null,
             'api_token'=>$this->api_token ?? '',

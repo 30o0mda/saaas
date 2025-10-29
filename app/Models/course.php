@@ -54,4 +54,12 @@ class course extends Model
         return $this->hasManyThrough(Subject::class, Stage::class);
     }
 
+    public function users(){
+        return $this->belongsToMany(User::class, 'join_courses', 'course_id', 'user_id');
+    }
+
+        public function courseOfUsers(){
+        return $this->hasMany(CourseUser::class);
+    }
+
 }
