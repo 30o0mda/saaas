@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AdminAuthController;
+use App\Http\Controllers\Api\AnswerController;
 use App\Http\Controllers\Api\CourseController;
 use App\Http\Controllers\Api\CourseOFUserController;
 use App\Http\Controllers\Api\CourseUserController;
@@ -8,6 +9,8 @@ use App\Http\Controllers\Api\EducationTypeController;
 use App\Http\Controllers\Api\JoinCourseController;
 use App\Http\Controllers\Api\OrganizationController;
 use App\Http\Controllers\Api\OrganizationEmployeeController;
+use App\Http\Controllers\Api\QuestionBankController;
+use App\Http\Controllers\Api\QuestionController;
 use App\Http\Controllers\Api\SessionController;
 use App\Http\Controllers\Api\StageController;
 use App\Http\Controllers\Api\SubjectController;
@@ -79,6 +82,23 @@ Route::prefix('organization')->group(function () {
         Route::post('/status_join_course', [JoinCourseController::class, 'statusJoinCourse']);
         Route::post('/accept_join_course', [CourseUserController::class, 'acceptJoinCourse']);
         Route::post('/reject_join_course', [CourseUserController::class, 'rejectJoinCourse']);
+
+
+        // Question Bank
+        Route::post('/create_question_bank', [QuestionBankController::class, 'createQuestionBank']);
+        Route::post('/update_question_bank', [QuestionBankController::class, 'updateQuestionBank']);
+        Route::post('/fetch_question_bank', [QuestionBankController::class, 'fetchQuestionBank']);
+        Route::post('/Show_question_bank_details', [QuestionBankController::class, 'ShowQuestionBankDetails']);
+        Route::post('/delete_question_bank', [QuestionBankController::class, 'deleteQuestionBank']);
+        Route::post('/toggle_status_question_bank', [QuestionBankController::class, 'toggleStatusQuestionBank']);
+
+
+        // Questions
+        Route::post('/create_question', [QuestionController::class, 'createQuestion']);
+
+        // Answers
+        Route::post('/create_answer', [AnswerController::class, 'createAnswer']);
+
     });
 });
 
