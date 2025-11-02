@@ -2247,6 +2247,398 @@
                     }
                 }
             }
+        },
+        "/api/register": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "تسجيل مستخدم جديد",
+                "operationId": "adfdd1ba2f3c4dc86c75558f4d13844c",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "name",
+                                    "email",
+                                    "phone",
+                                    "password",
+                                    "country_code"
+                                ],
+                                "properties": {
+                                    "name": {
+                                        "type": "string",
+                                        "example": "أحمد علي"
+                                    },
+                                    "email": {
+                                        "type": "string",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "phone": {
+                                        "type": "string",
+                                        "example": "01012345678"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    },
+                                    "country_code": {
+                                        "type": "string",
+                                        "example": "+20"
+                                    },
+                                    "organization_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم التسجيل بنجاح"
+                    }
+                }
+            }
+        },
+        "/api/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "تسجيل الدخول",
+                "operationId": "7716aff3e5de668956e4c3802154391b",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "credentials",
+                                    "password"
+                                ],
+                                "properties": {
+                                    "credentials": {
+                                        "type": "string",
+                                        "example": "ahmed@example.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "123456"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تسجيل الدخول بنجاح"
+                    },
+                    "401": {
+                        "description": "بيانات تسجيل الدخول غير صحيحة"
+                    }
+                }
+            }
+        },
+        "/api/education-types": {
+            "get": {
+                "tags": [
+                    "Education"
+                ],
+                "summary": "جلب أنواع التعليم للمؤسسة",
+                "operationId": "1252a115675e47de7adc5eb2a366eeb1",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب أنواع التعليم بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/stages/by-education": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "جلب المراحل بناءً على نوع التعليم",
+                "operationId": "ca15ce08f616bb4c9c884fe57ef330db",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "education_type_id"
+                                ],
+                                "properties": {
+                                    "education_type_id": {
+                                        "type": "integer",
+                                        "example": 2
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم جلب المراحل بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/stages/children": {
+            "post": {
+                "tags": [
+                    "Stages"
+                ],
+                "summary": "جلب المراحل الفرعية",
+                "operationId": "957d636dfb92d05a11414b73d9162ca0",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "parent_id"
+                                ],
+                                "properties": {
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم جلب المراحل بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/user/set-stage": {
+            "post": {
+                "tags": [
+                    "User"
+                ],
+                "summary": "تحديد مرحلة المستخدم",
+                "operationId": "77ff7c2e740e95e6984534b310dcf62d",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "stage_id"
+                                ],
+                                "properties": {
+                                    "stage_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم تغيير المرحلة بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/courses": {
+            "get": {
+                "tags": [
+                    "Courses"
+                ],
+                "summary": "جلب الكورسات المتاحة للمرحلة",
+                "operationId": "36bb51715548742e9d6a11d1d4d3ecec",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الكورسات بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/question-bank": {
+            "post": {
+                "tags": [
+                    "Question Bank"
+                ],
+                "summary": "جلب الأسئلة الخاصة ببنك الأسئلة",
+                "operationId": "64d2538d7de4c2b57aeb9964793432ab",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "question_bank_id"
+                                ],
+                                "properties": {
+                                    "question_bank_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم جلب الأسئلة بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/join-question-bank": {
+            "post": {
+                "tags": [
+                    "Question Bank"
+                ],
+                "summary": "انضمام المستخدم إلى بنك الأسئلة",
+                "operationId": "87e74629d0e485b8150665849db2e340",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "user_id",
+                                    "question_bank_id"
+                                ],
+                                "properties": {
+                                    "user_id": {
+                                        "type": "integer",
+                                        "example": 10
+                                    },
+                                    "question_bank_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "pending"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم الانضمام بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/question-bank/details": {
+            "get": {
+                "tags": [
+                    "Question Bank"
+                ],
+                "summary": "جلب تفاصيل بنك الأسئلة",
+                "operationId": "e736537334e65a151e95f2cf5c8c8184",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب التفاصيل بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/student-result": {
+            "post": {
+                "tags": [
+                    "Student Result"
+                ],
+                "summary": "إرسال نتيجة الطالب",
+                "operationId": "3369cf57fcf98d4f841fbebf1049cae8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "question_id",
+                                    "answer_id"
+                                ],
+                                "properties": {
+                                    "question_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "answer_id": {
+                                        "type": "integer",
+                                        "example": 5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم حفظ الإجابة بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -2587,6 +2979,26 @@
         {
             "name": "Subjects",
             "description": "Subjects"
+        },
+        {
+            "name": "Authentication",
+            "description": "Authentication"
+        },
+        {
+            "name": "Education",
+            "description": "Education"
+        },
+        {
+            "name": "User",
+            "description": "User"
+        },
+        {
+            "name": "Question Bank",
+            "description": "Question Bank"
+        },
+        {
+            "name": "Student Result",
+            "description": "Student Result"
         }
     ]
 }

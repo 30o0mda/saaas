@@ -6,6 +6,7 @@ use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Enum\QuestionBank\QuestionBankStatus as QuestionBankQuestionBankStatus;
 use App\Http\Enum\QuestionBank\QuestionBankStatus;
+use App\Http\Enum\UserEnum;
 use App\Http\Requests\StudentResult\StudentResultRequest;
 use App\Http\Requests\Users\FetchQuestionBankDetailesRequest;
 use App\Http\Requests\Users\FetchQuestionBankRequest;

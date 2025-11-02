@@ -6,24 +6,28 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 
+
 /**
  * @OA\Schema(
- *     schema="Session",
+ *     schema="SessionResource",
+ *     title="Session Resource",
+ *     description="تفاصيل الجلسة (Session) ضمن الكورس، وقد تحتوي على جلسات فرعية (Children)",
  *     type="object",
- *     @OA\Property(property="id", type="integer", example=5),
- *     @OA\Property(property="name", type="string", example="aaa"),
- *     @OA\Property(property="description", type="string", example="ddd"),
- *     @OA\Property(property="course_id", type="integer", example=1),
- *     @OA\Property(property="parent_id", type="integer", nullable=true, example=null),
- *     @OA\Property(property="link", type="string", example="ddd"),
- *     @OA\Property(property="file", type="string", example="ddd"),
- *     @OA\Property(property="order", type="integer", example=1),
- *     @OA\Property(property="is_active", type="boolean", example=true),
- *     @OA\Property(property="type", type="string", example="فيديو"),
+ *     @OA\Property(property="id", type="integer", example=5, description="معرّف الجلسة"),
+ *     @OA\Property(property="name", type="string", example="مقدمة في البرمجة", description="اسم الجلسة"),
+ *     @OA\Property(property="description", type="string", example="جلسة تشرح أساسيات البرمجة بلغة PHP", description="وصف الجلسة"),
+ *     @OA\Property(property="course_id", type="integer", example=1, description="معرّف الكورس الذي تنتمي إليه الجلسة"),
+ *     @OA\Property(property="parent_id", type="integer", nullable=true, example=null, description="معرّف الجلسة الأب إن كانت جلسة فرعية"),
+ *     @OA\Property(property="link", type="string", nullable=true, example="https://example.com/session/intro", description="رابط الجلسة (في حال كانت فيديو أو بث مباشر)"),
+ *     @OA\Property(property="file", type="string", nullable=true, example="https://example.com/storage/files/lecture1.pdf", description="ملف مرفق مع الجلسة إن وُجد"),
+ *     @OA\Property(property="order", type="integer", example=1, description="ترتيب الجلسة داخل الكورس"),
+ *     @OA\Property(property="is_active", type="boolean", example=true, description="حالة تفعيل الجلسة"),
+ *     @OA\Property(property="type", type="string", example="فيديو", description="نوع الجلسة (فيديو - PDF - واجب عملي - اختبار)"),
  *     @OA\Property(
  *         property="children",
  *         type="array",
- *         @OA\Items(ref="#/components/schemas/Session")
+ *         description="الجلسات الفرعية المرتبطة بهذه الجلسة (إن وُجدت)",
+ *         @OA\Items(ref="#/components/schemas/SessionResource")
  *     )
  * )
  */
