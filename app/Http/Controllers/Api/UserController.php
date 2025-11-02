@@ -4,20 +4,31 @@ namespace App\Http\Controllers\Api;
 
 use App\Helpers\ApiResponseHelper;
 use App\Http\Controllers\Controller;
-use App\Http\Enum\UserEnum;
+use App\Http\Enum\QuestionBank\QuestionBankStatus as QuestionBankQuestionBankStatus;
+use App\Http\Enum\QuestionBank\QuestionBankStatus;
+use App\Http\Requests\StudentResult\StudentResultRequest;
+use App\Http\Requests\Users\FetchQuestionBankDetailesRequest;
+use App\Http\Requests\Users\FetchQuestionBankRequest;
 use App\Http\Requests\Users\FetchStageByEducationTypeRequest;
 use App\Http\Requests\Users\FetchStageChildrenRequest;
+use App\Http\Requests\Users\JoinQuestionBankRequest;
 use App\Http\Requests\Users\SetUserStageRequest;
 use App\Http\Requests\Users\UserLoginRequest;
 use App\Http\Requests\Users\UserRegisterRequest;
 use App\Http\Resources\Courses\CourseResource;
 use App\Http\Resources\EducationType\EducationTypeResource;
+use App\Http\Resources\QuestionBank\QuestionBankResource;
 use App\Http\Resources\Stages\StageResource;
+use App\Http\Resources\StudentResult\StudentResultResource;
 use App\Http\Resources\Users\UserResource;
+use App\Models\Answer;
 use App\Models\course;
 use App\Models\EducationType;
 use App\Models\organization;
+use App\Models\Question;
+use App\Models\QuestionBank;
 use App\Models\stage;
+use App\Models\StudentResult;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -33,11 +44,7 @@ class UserController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'country_code' => $data['country_code'],
-            // 'type' => UserEnum::from($data['type'])->value,
-            // 'parent_name' => $data['parent_name'],
-            // 'parent_phone' => $data['parent_phone'],
-            'organization_id' => $data['organization_id'],
-            // 'image' => $data['image'],
+            'organization_id' => $data['organization_id'] ?? null,
         ]);
         return ApiResponseHelper::response(true, 'تم التسجيل بنجاح', [
             'user' => new UserResource($user),
@@ -109,6 +116,84 @@ class UserController extends Controller
             'courses' => CourseResource::collection($course)
         ]);
     }
+
+    public function fetchQuestionBank(FetchQuestionBankRequest $request){
+        $data = $request->validated();
+        $question_bank = QuestionBank::find($data['question_bank_id']);
+        return ApiResponseHelper::response(true, 'تم جلب [questions] الاسئلة بنجاح', [
+            'questions_bank' => $question_bank->questions
+        ]);
+    }
+
+public function joinQuestionBank(JoinQuestionBankRequest $request)
+{
+    $data = $request->validated();
+    $user = User::find($data['user_id']);
+    $questionBank = QuestionBank::find($data['question_bank_id']);
+    $status = $data['status'] ?? QuestionBankStatus::PENDING->value;
+    if ($status !== QuestionBankStatus::PENDING->value) {
+        return ApiResponseHelper::response(false, 'لم يتم قبول الانضمام');
+    }
+    $user->questionBanks()->syncWithoutDetaching([
+        $questionBank->id => [
+            'status' => $status
+        ]
+    ]);
+    return ApiResponseHelper::response(true, 'تم الانضمام لبنك الاسئله بنجاح', [
+        'status' => $status,
+        'question_bank' => $questionBank,
+    ]);
+}
+     public function fetchQuestionBankDetails(FetchQuestionBankDetailesRequest $request){
+        $data = $request->validated();
+
+        $user = auth()->user();
+        $question_bank = $user->questionBanks;
+        return ApiResponseHelper::response(true, 'تم جلب [questions] الاسئلة بنجاح', [
+            'questions_bank' => QuestionBankResource::collection($question_bank)
+        ]);
+     }
+
+
+
+
+     public function studentResult(StudentResultRequest $request){
+        $data = $request->validated();
+        $student = auth()->user();
+        $question = Question::find($data['question_id']);
+        $questionBank = QuestionBank::find($question->question_bank_id);
+
+        $studentResult = StudentResult::firstOrCreate([
+            'user_id' => $student->id,
+            'question_bank_id' => $question->question_bank_id,
+            'organization_id' => $student->organization_id
+        ]);
+        if($studentResult->is_finished){
+            return ApiResponseHelper::response(false, 'لقد انتهى الاختبار');
+        }
+        $answer = Answer::find($data['answer_id']);
+        $studentResult->studentResultAnswers()->create([
+            'student_result_id' => $studentResult->id,
+            'question_id' => $question->id,
+            'answer_id' => $data['answer_id'],
+            'is_correct' => $answer->is_correct
+        ]);
+        $count = $questionBank->questions->count();
+        $studentAnswerCount = $studentResult->studentResultAnswers->count();
+        if($count == $studentAnswerCount){
+            $studentResult->update([
+                'is_finished' => true
+            ]);
+        }
+   return ApiResponseHelper::response(true, 'تم حفظ الاجابة بنجاح', [
+        'result' => new StudentResultResource($studentResult)
+    ]);
+
+
+
+
+
+     }
 }
 
 

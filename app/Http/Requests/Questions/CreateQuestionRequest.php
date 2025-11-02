@@ -35,7 +35,6 @@ class CreateQuestionRequest extends FormRequest
             'answers.*.is_correct'=>'nullable|boolean' ?? null,
             'answers.*.media'=>'nullable|string' ?? null,
             'answers.*.media_type'=>'nullable|integer' ?? null
-
         ];
     }
 }

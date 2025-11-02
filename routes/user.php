@@ -43,6 +43,14 @@ Route::get('/fetch_my_join_courses', [JoinCourseController::class, 'fetchMyCours
 Route::post('/show_join_course_details', [JoinCourseController::class, 'showJoinCourseDetails']);
 
 
+// Question - bank
+Route::post('/fetch_question_bank', [UserController::class, 'fetchQuestionBank']);
+Route::post('/join_question_bank', [UserController::class, 'joinQuestionBank']);
+Route::post('/fetch_question_bank_details', [UserController::class, 'fetchQuestionBankDetails']);
+
+//Student Result
+Route::post('/student_result', [UserController::class, 'studentResult']);
+
 
 });
 

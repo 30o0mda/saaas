@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Http\Enum\QuestionBank\QuestionBankStatus as QuestionBankQuestionBankStatus;
+use App\Http\Enum\QuestionBank\QuestionBankStatus;
 use App\Http\Enum\UserEnum;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -54,7 +56,24 @@ class User extends Authenticatable
         return $this->hasManyThrough(course::class , CourseUser::class , 'user_id', 'id', 'id', 'course_id');
     }
 
+    public function questionBank(){
+        return $this->hasMany(QuestionBank::class , 'user_id');
+    }
+
+    // User.php
+public function questionBanks()
+{
+    return $this->belongsToMany(QuestionBank::class, 'user_question_bank', 'user_id', 'question_bank_id')->withPivot('status');
+}
+
+public function studentResults()
+{
+    return $this->hasMany(StudentResult::class);
+}
+
+
      protected $casts = [
         'type' => UserEnum::class,
+
     ];
 }

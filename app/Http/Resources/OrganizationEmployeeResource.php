@@ -48,8 +48,6 @@ class OrganizationEmployeeResource extends JsonResource
             'is_master' => $this->is_master ?? false,
             'parent_id' => $this->parent_id ?? null,
             'organization_id'=>$this->organization_id ?? null,
-            'admin_id'=>$this->admin_id ?? null,
-            'token'=>$this->token ?? '',
 
         ];
     }

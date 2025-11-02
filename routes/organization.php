@@ -82,8 +82,7 @@ Route::prefix('organization')->group(function () {
         Route::post('/status_join_course', [JoinCourseController::class, 'statusJoinCourse']);
         Route::post('/accept_join_course', [CourseUserController::class, 'acceptJoinCourse']);
         Route::post('/reject_join_course', [CourseUserController::class, 'rejectJoinCourse']);
-
-
+        
         // Question Bank
         Route::post('/create_question_bank', [QuestionBankController::class, 'createQuestionBank']);
         Route::post('/update_question_bank', [QuestionBankController::class, 'updateQuestionBank']);
@@ -91,14 +90,10 @@ Route::prefix('organization')->group(function () {
         Route::post('/Show_question_bank_details', [QuestionBankController::class, 'ShowQuestionBankDetails']);
         Route::post('/delete_question_bank', [QuestionBankController::class, 'deleteQuestionBank']);
         Route::post('/toggle_status_question_bank', [QuestionBankController::class, 'toggleStatusQuestionBank']);
-
-
         // Questions
         Route::post('/create_question', [QuestionController::class, 'createQuestion']);
-
         // Answers
         Route::post('/create_answer', [AnswerController::class, 'createAnswer']);
-
     });
 });
 

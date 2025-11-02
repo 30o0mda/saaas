@@ -55,6 +55,11 @@ class organization extends Model
         return $this->hasMany(User::class);
     }
 
+    public function studentResults()
+{
+    return $this->hasMany(StudentResult::class);
+}
+
        protected $casts = [
         'type' => OrganizationEnum::class,
     ];

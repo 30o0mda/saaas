@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\QuestionBank;
 
+use App\Http\Resources\Questions\QuestionsResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,6 +20,7 @@ class QuestionBankResource extends JsonResource
             'is_active' => (int)$this->is_active ?? false,
             'order' => $this->order ?? null,
             'price' => $this->price ?? null,
+            'questions'=>QuestionsResource::collection($this->questions)
         ];
     }
 }

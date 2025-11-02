@@ -14,6 +14,7 @@ use App\Http\Requests\{
 };
 use App\Http\Resources\OrganizationEmployeeResource;
 use App\Models\OrganizationEmployee;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 /**
@@ -114,6 +115,7 @@ class OrganizationEmployeeController extends Controller
     public function createOrganizationEmployee(OrganizationEmployeeRequest $request)
     {
         $data = $request->validated();
+        $organization = auth()->guard('organization')->user();
 
         $employee = OrganizationEmployee::create([
             'name' => $data['name'],
@@ -121,11 +123,10 @@ class OrganizationEmployeeController extends Controller
             'phone' => $data['phone'],
             'password' => Hash::make($data['password']),
             'type' => $data['type'],
-            'organization_id' => $data['organization_id'] ?? null,
+            'organization_id' => $organization->id ?? null,
             'parent_id' => $data['parent_id'] ?? null,
             'image' => $data['image'] ?? null,
         ]);
-
         return ApiResponseHelper::response(true, 'تم إنشاء الموظف بنجاح', new OrganizationEmployeeResource($employee));
     }
 
