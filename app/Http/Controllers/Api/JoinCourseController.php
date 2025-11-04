@@ -13,6 +13,7 @@ use App\Http\Resources\Courses\CourseResource;
 use App\Http\Resources\JoinCourse\JoinCourseResource;
 use App\Models\CourseUser;
 use App\Models\JoinCourseRequest;
+use App\Service\JoinCourse\JoinCourseService;
 use Illuminate\Http\Request;
 
 /**
@@ -23,9 +24,18 @@ use Illuminate\Http\Request;
  */
 class JoinCourseController extends Controller
 {
+
+    protected $JoinCourseService;
+
+    public function __construct(JoinCourseService $JoinCourseService)
+    {
+        $this->JoinCourseService = $JoinCourseService;
+    }
+
+
     /**
      * @OA\Post(
-     *     path="/api/join-course",
+     *     path="/join_course",
      *     operationId="joinCourse",
      *     tags={"JoinCourse"},
      *     summary="User joins a course",
@@ -49,7 +59,7 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم التسجيل بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourse")
+     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourseResource")
      *             )
      *         )
      *     ),
@@ -59,24 +69,12 @@ class JoinCourseController extends Controller
     public function joinCourse(CreateJoinCourseRequest $request)
     {
         $data = $request->validated();
-        $user = auth()->user();
-        $image = $data['image']->store('join_courses', 'public');
-        $join_course = JoinCourseRequest::create([
-            'user_id' => $user->id,
-            'course_id' => $data['course_id'],
-            'organization_id' => $user->organization_id,
-            'status' => JoinCourseEnum::PENDING->value,
-            'account_number' => $data['account_number'],
-            'image' => $image,
-        ]);
-        return ApiResponseHelper::response(true, 'تم التسجيل بنجاح', [
-            'join_course' => new JoinCourseResource($join_course),
-        ]);
+        return $this->JoinCourseService->joinCourse($data)->getData();
     }
 
     /**
      * @OA\Get(
-     *     path="/api/join-course",
+     *     path="/fetch_join_courses",
      *     operationId="fetchJoinCourses",
      *     tags={"JoinCourse"},
      *     summary="Fetch join course requests for organization",
@@ -87,7 +85,7 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب [join_courses] التسجيلات بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_courses", type="array", @OA\Items(ref="#/components/schemas/JoinCourse"))
+     *                 @OA\Property(property="join_courses", type="array", @OA\Items(ref="#/components/schemas/JoinCourseResource"))
      *             )
      *         )
      *     ),
@@ -96,16 +94,12 @@ class JoinCourseController extends Controller
      */
     public function fetchJoinCourses()
     {
-        $organization = auth()->guard('organization')->user();
-        $join_courses = JoinCourseRequest::where('organization_id', $organization->id)->get();
-        return ApiResponseHelper::response(true, 'تم جلب [join_courses] التسجيلات بنجاح', [
-            'join_courses' => JoinCourseResource::collection($join_courses),
-        ]);
+        return $this->JoinCourseService->fetchJoinCourses()->getData();
     }
 
     /**
      * @OA\Post(
-     *     path="/api/join-course/show",
+     *     path="/show_join_course",
      *     operationId="showJoinCourse",
      *     tags={"JoinCourse"},
      *     summary="Show details of a join course request",
@@ -123,7 +117,7 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب [join_course] التسجيل بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourse")
+     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourseResource")
      *             )
      *         )
      *     ),
@@ -133,15 +127,12 @@ class JoinCourseController extends Controller
     public function showJoinCourse(ShowJoinCourseRequest $request)
     {
         $data = $request->validated();
-        $join_course = JoinCourseRequest::find($data['join_course_request_id']);
-        return ApiResponseHelper::response(true, 'تم جلب [join_course] التسجيل بنجاح', [
-            'join_course' => new JoinCourseResource($join_course),
-        ]);
+        return $this->JoinCourseService->showJoinCourse($data)->getData();
     }
 
     /**
      * @OA\Post(
-     *     path="/api/join-course/status",
+     *     path="/status_join_course",
      *     operationId="statusJoinCourse",
      *     tags={"JoinCourse"},
      *     summary="Change status of a join course request",
@@ -160,7 +151,7 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم تغيير حالة التسجيل بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourse")
+     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourseResource")
      *             )
      *         )
      *     ),
@@ -170,24 +161,12 @@ class JoinCourseController extends Controller
     public function statusJoinCourse(ChangeStatusJoinCourseRequest $request)
     {
         $data = $request->validated();
-        $join_course = JoinCourseRequest::find($data['join_course_request_id']);
-        $join_course->update([
-            'status' => $data['status']
-        ]);
-        if($data['status'] == JoinCourseEnum::ACCEPTED->value){
-            CourseUser::firstOrCreate([
-                'user_id' => $join_course->user_id,
-                'course_id' => $join_course->course_id
-            ]);
-        }
-        return ApiResponseHelper::response(true, 'تم تغيير حالة التسجيل بنجاح', [
-            'join_course' => new JoinCourseResource($join_course),
-        ]);
+        return $this->JoinCourseService->statusJoinCourse($data)->getData();
     }
 
     /**
      * @OA\Get(
-     *     path="/api/join-course/my-courses",
+     *     path="/fetch_my_join_courses",
      *     operationId="fetchMyCourses",
      *     tags={"JoinCourse"},
      *     summary="Fetch authenticated user's joined courses",
@@ -198,7 +177,7 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب [join_courses] التسجيلات بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_courses", type="array", @OA\Items(ref="#/components/schemas/Course"))
+     *                 @OA\Property(property="join_courses", type="array", @OA\Items(ref="#/components/schemas/CourseResource"))
      *             )
      *         )
      *     ),
@@ -207,16 +186,12 @@ class JoinCourseController extends Controller
      */
     public function fetchMyCourses()
     {
-        $user = auth()->user();
-        $user_courses = $user->userCourses;
-        return ApiResponseHelper::response(true, 'تم جلب [join_courses] التسجيلات بنجاح', [
-            'join_courses' => CourseResource::collection($user_courses),
-        ]);
+        return $this->JoinCourseService->fetchMyCourses()->getData();
     }
 
     /**
      * @OA\Post(
-     *     path="/api/join-course/details",
+     *     path="/show_join_course_details",
      *     operationId="showJoinCourseDetails",
      *     tags={"JoinCourse"},
      *     summary="Show details of a joined course",
@@ -234,19 +209,16 @@ class JoinCourseController extends Controller
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب [join_course] التسجيل بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourse")
+     *                 @OA\Property(property="join_course", ref="#/components/schemas/JoinCourseResource")
      *             )
      *         )
      *     ),
      *     security={{"sanctum": {}}}
      * )
      */
-    public function showJoinCourseDetails(ShowJoinCourseDetailsRequest $request){
-        $data = $request->validated();
-        $join_course = JoinCourseRequest::find($data['course_id']);
-        return ApiResponseHelper::response(true, 'تم جلب [join_course] التسجيل بنجاح', [
-            'join_course' => new JoinCourseResource($join_course),
-        ]);
-    }
+        public function showJoinCourseDetails(ShowJoinCourseDetailsRequest $request){
+            $data = $request->validated();
+            return $this->JoinCourseService->showJoinCourseDetails($data)->getData();
+        }
 
 }

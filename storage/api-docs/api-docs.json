@@ -740,6 +740,51 @@
                         }
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "جلب أنواع التعليم للمستخدم الحالي",
+                "operationId": "3f4b3b63a560e15f8c61fecc120886c2",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب أنواع التعليم بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب [education_types] نوع التعليم بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "education_types": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/EducationTypeResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
             }
         },
         "/delete_education_type": {
@@ -812,13 +857,417 @@
                 }
             }
         },
+        "/join_course": {
+            "post": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "User joins a course",
+                "description": "Allows authenticated user to request joining a course",
+                "operationId": "joinCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "required": [
+                                    "course_id",
+                                    "account_number",
+                                    "image"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "account_number": {
+                                        "type": "string",
+                                        "example": "123456789"
+                                    },
+                                    "image": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Join course request created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم التسجيل بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_course": {
+                                                    "$ref": "#/components/schemas/JoinCourseResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/fetch_join_courses": {
+            "get": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "Fetch join course requests for organization",
+                "operationId": "fetchJoinCourses",
+                "responses": {
+                    "200": {
+                        "description": "List of join course requests",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب [join_courses] التسجيلات بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_courses": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/JoinCourseResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/show_join_course": {
+            "post": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "Show details of a join course request",
+                "operationId": "showJoinCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "join_course_request_id"
+                                ],
+                                "properties": {
+                                    "join_course_request_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Join course request details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب [join_course] التسجيل بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_course": {
+                                                    "$ref": "#/components/schemas/JoinCourseResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/status_join_course": {
+            "post": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "Change status of a join course request",
+                "operationId": "statusJoinCourse",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "join_course_request_id",
+                                    "status"
+                                ],
+                                "properties": {
+                                    "join_course_request_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "status": {
+                                        "type": "string",
+                                        "example": "ACCEPTED"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Status updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم تغيير حالة التسجيل بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_course": {
+                                                    "$ref": "#/components/schemas/JoinCourseResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/fetch_my_join_courses": {
+            "get": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "Fetch authenticated user's joined courses",
+                "operationId": "fetchMyCourses",
+                "responses": {
+                    "200": {
+                        "description": "List of user's courses",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب [join_courses] التسجيلات بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_courses": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/CourseResource"
+                                                    }
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/show_join_course_details": {
+            "post": {
+                "tags": [
+                    "JoinCourse"
+                ],
+                "summary": "Show details of a joined course",
+                "operationId": "showJoinCourseDetails",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "course_id"
+                                ],
+                                "properties": {
+                                    "course_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Join course details fetched",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب [join_course] التسجيل بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "join_course": {
+                                                    "$ref": "#/components/schemas/JoinCourseResource"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/get_organizations": {
+            "get": {
+                "tags": [
+                    "Organizations"
+                ],
+                "summary": "جلب كل المنظمات",
+                "operationId": "29c12a92b2e11dc0664ddab3511d2c5e",
+                "responses": {
+                    "200": {
+                        "description": "تم جلب المنظمات بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "status": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم جلب المنظمات بنجاح"
+                                        },
+                                        "organization": {
+                                            "type": "array",
+                                            "items": {
+                                                "$ref": "#/components/schemas/OrganizationResource"
+                                            }
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/create_organization": {
             "post": {
                 "tags": [
                     "Organizations"
                 ],
                 "summary": "إنشاء منظمة جديدة",
-                "operationId": "c9b57245d469825cd739e417b4de6085",
+                "operationId": "b97ca21aaa1c2c1e5632c85f8fec45ed",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -875,48 +1324,6 @@
                                         },
                                         "organization": {
                                             "$ref": "#/components/schemas/OrganizationResource"
-                                        }
-                                    },
-                                    "type": "object"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "bearerAuth": []
-                    }
-                ]
-            }
-        },
-        "/get_organizations": {
-            "get": {
-                "tags": [
-                    "Organizations"
-                ],
-                "summary": "جلب كل المنظمات",
-                "operationId": "29c12a92b2e11dc0664ddab3511d2c5e",
-                "responses": {
-                    "200": {
-                        "description": "تم جلب المنظمات بنجاح",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "properties": {
-                                        "status": {
-                                            "type": "boolean",
-                                            "example": true
-                                        },
-                                        "message": {
-                                            "type": "string",
-                                            "example": "تم جلب المنظمات بنجاح"
-                                        },
-                                        "organization": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/OrganizationResource"
-                                            }
                                         }
                                     },
                                     "type": "object"
@@ -1324,7 +1731,7 @@
                                         "data": {
                                             "properties": {
                                                 "session": {
-                                                    "$ref": "#/components/schemas/Session"
+                                                    "$ref": "#/components/schemas/SessionResource"
                                                 }
                                             },
                                             "type": "object"
@@ -1408,7 +1815,7 @@
                                         "data": {
                                             "properties": {
                                                 "session": {
-                                                    "$ref": "#/components/schemas/Session"
+                                                    "$ref": "#/components/schemas/SessionResource"
                                                 }
                                             },
                                             "type": "object"
@@ -1458,7 +1865,7 @@
                                         "data": {
                                             "properties": {
                                                 "session": {
-                                                    "$ref": "#/components/schemas/Session"
+                                                    "$ref": "#/components/schemas/SessionResource"
                                                 }
                                             },
                                             "type": "object"
@@ -1550,7 +1957,7 @@
                                         "data": {
                                             "properties": {
                                                 "session": {
-                                                    "$ref": "#/components/schemas/Session"
+                                                    "$ref": "#/components/schemas/SessionResource"
                                                 }
                                             },
                                             "type": "object"
@@ -1619,7 +2026,7 @@
                                         "data": {
                                             "properties": {
                                                 "session": {
-                                                    "$ref": "#/components/schemas/Session"
+                                                    "$ref": "#/components/schemas/SessionResource"
                                                 }
                                             },
                                             "type": "object"
@@ -1696,7 +2103,7 @@
                                         "data": {
                                             "type": "array",
                                             "items": {
-                                                "$ref": "#/components/schemas/Session"
+                                                "$ref": "#/components/schemas/SessionResource"
                                             }
                                         }
                                     },
@@ -2248,13 +2655,14 @@
                 }
             }
         },
-        "/api/register": {
+        "/register_user": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Users"
                 ],
                 "summary": "تسجيل مستخدم جديد",
-                "operationId": "adfdd1ba2f3c4dc86c75558f4d13844c",
+                "description": "يُستخدم لتسجيل مستخدم جديد في النظام",
+                "operationId": "697fafaced4623145b4b6c5449ffd228",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2263,22 +2671,22 @@
                                 "required": [
                                     "name",
                                     "email",
-                                    "phone",
                                     "password",
+                                    "phone",
                                     "country_code"
                                 ],
                                 "properties": {
                                     "name": {
                                         "type": "string",
-                                        "example": "أحمد علي"
+                                        "example": "محمد"
                                     },
                                     "email": {
                                         "type": "string",
-                                        "example": "ahmed@example.com"
+                                        "example": "mohamed@test.com"
                                     },
                                     "phone": {
                                         "type": "string",
-                                        "example": "01012345678"
+                                        "example": "01000000000"
                                     },
                                     "password": {
                                         "type": "string",
@@ -2300,18 +2708,47 @@
                 },
                 "responses": {
                     "200": {
-                        "description": "تم التسجيل بنجاح"
+                        "description": "تم التسجيل بنجاح",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "تم التسجيل بنجاح"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "user": {
+                                                    "$ref": "#/components/schemas/User"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "بيانات غير صحيحة"
                     }
                 }
             }
         },
-        "/api/login": {
+        "/login_user": {
             "post": {
                 "tags": [
-                    "Authentication"
+                    "Users"
                 ],
                 "summary": "تسجيل الدخول",
-                "operationId": "7716aff3e5de668956e4c3802154391b",
+                "description": "تسجيل الدخول بواسطة البريد أو رقم الهاتف",
+                "operationId": "e2c4c432e47c7352cd10ed628e950af5",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2324,7 +2761,7 @@
                                 "properties": {
                                     "credentials": {
                                         "type": "string",
-                                        "example": "ahmed@example.com"
+                                        "example": "user@example.com"
                                     },
                                     "password": {
                                         "type": "string",
@@ -2341,38 +2778,20 @@
                         "description": "تم تسجيل الدخول بنجاح"
                     },
                     "401": {
-                        "description": "بيانات تسجيل الدخول غير صحيحة"
+                        "description": "بيانات الدخول غير صحيحة"
                     }
                 }
             }
         },
-        "/api/education-types": {
-            "get": {
-                "tags": [
-                    "Education"
-                ],
-                "summary": "جلب أنواع التعليم للمؤسسة",
-                "operationId": "1252a115675e47de7adc5eb2a366eeb1",
-                "responses": {
-                    "200": {
-                        "description": "تم جلب أنواع التعليم بنجاح"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/stages/by-education": {
+        "/fetch_stage_by_education_type": {
             "post": {
                 "tags": [
-                    "Stages"
+                    "Users"
                 ],
-                "summary": "جلب المراحل بناءً على نوع التعليم",
-                "operationId": "ca15ce08f616bb4c9c884fe57ef330db",
+                "summary": "جلب المراحل حسب نوع التعليم",
+                "operationId": "f7bc6c250946e2da9f6ce9e8f1f2a0f7",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
@@ -2381,43 +2800,6 @@
                                 ],
                                 "properties": {
                                     "education_type_id": {
-                                        "type": "integer",
-                                        "example": 2
-                                    }
-                                },
-                                "type": "object"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "تم جلب المراحل بنجاح"
-                    }
-                },
-                "security": [
-                    {
-                        "sanctum": []
-                    }
-                ]
-            }
-        },
-        "/api/stages/children": {
-            "post": {
-                "tags": [
-                    "Stages"
-                ],
-                "summary": "جلب المراحل الفرعية",
-                "operationId": "957d636dfb92d05a11414b73d9162ca0",
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "required": [
-                                    "parent_id"
-                                ],
-                                "properties": {
-                                    "parent_id": {
                                         "type": "integer",
                                         "example": 1
                                     }
@@ -2439,14 +2821,53 @@
                 ]
             }
         },
-        "/api/user/set-stage": {
+        "/fetch_stage_children": {
             "post": {
                 "tags": [
-                    "User"
+                    "Users"
                 ],
-                "summary": "تحديد مرحلة المستخدم",
-                "operationId": "77ff7c2e740e95e6984534b310dcf62d",
+                "summary": "جلب مراحل فرعية حسب المرحلة الأب",
+                "operationId": "d7d2aea415ea5c21de08dd4492f8a62e",
                 "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "parent_id"
+                                ],
+                                "properties": {
+                                    "parent_id": {
+                                        "type": "integer",
+                                        "example": 3
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "تم جلب المراحل الفرعية بنجاح"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/set_user_stage": {
+            "post": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "تعيين المرحلة للمستخدم",
+                "operationId": "a7445de4940227828375ce85db83bde6",
+                "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
@@ -2476,13 +2897,13 @@
                 ]
             }
         },
-        "/api/courses": {
+        "/fetch_courses": {
             "get": {
                 "tags": [
-                    "Courses"
+                    "Users"
                 ],
-                "summary": "جلب الكورسات المتاحة للمرحلة",
-                "operationId": "36bb51715548742e9d6a11d1d4d3ecec",
+                "summary": "جلب الكورسات الخاصة بالمستخدم",
+                "operationId": "c69e04d25e50875543fe48be7b10ea23",
                 "responses": {
                     "200": {
                         "description": "تم جلب الكورسات بنجاح"
@@ -2495,14 +2916,15 @@
                 ]
             }
         },
-        "/api/question-bank": {
+        "/fetch_question_bank": {
             "post": {
                 "tags": [
-                    "Question Bank"
+                    "QuestionBank"
                 ],
-                "summary": "جلب الأسئلة الخاصة ببنك الأسئلة",
-                "operationId": "64d2538d7de4c2b57aeb9964793432ab",
+                "summary": "جلب أسئلة بنك معين",
+                "operationId": "9c99a749303ec376d3ebfdfba5273938",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
@@ -2512,7 +2934,7 @@
                                 "properties": {
                                     "question_bank_id": {
                                         "type": "integer",
-                                        "example": 1
+                                        "example": 10
                                     }
                                 },
                                 "type": "object"
@@ -2532,14 +2954,15 @@
                 ]
             }
         },
-        "/api/join-question-bank": {
+        "/join_question_bank": {
             "post": {
                 "tags": [
-                    "Question Bank"
+                    "QuestionBank"
                 ],
                 "summary": "انضمام المستخدم إلى بنك الأسئلة",
-                "operationId": "87e74629d0e485b8150665849db2e340",
+                "operationId": "02436a15face6cc5215948bf5a25d9a6",
                 "requestBody": {
+                    "required": true,
                     "content": {
                         "application/json": {
                             "schema": {
@@ -2550,11 +2973,11 @@
                                 "properties": {
                                     "user_id": {
                                         "type": "integer",
-                                        "example": 10
+                                        "example": 3
                                     },
                                     "question_bank_id": {
                                         "type": "integer",
-                                        "example": 3
+                                        "example": 10
                                     },
                                     "status": {
                                         "type": "string",
@@ -2578,16 +3001,16 @@
                 ]
             }
         },
-        "/api/question-bank/details": {
-            "get": {
+        "/fetch_question_bank_details": {
+            "post": {
                 "tags": [
-                    "Question Bank"
+                    "QuestionBank"
                 ],
-                "summary": "جلب تفاصيل بنك الأسئلة",
-                "operationId": "e736537334e65a151e95f2cf5c8c8184",
+                "summary": "جلب تفاصيل بنوك الأسئلة الخاصة بالمستخدم",
+                "operationId": "63102075f41ec74fcdbcd9f7c5877c30",
                 "responses": {
                     "200": {
-                        "description": "تم جلب التفاصيل بنجاح"
+                        "description": "تم جلب بنوك الأسئلة بنجاح"
                     }
                 },
                 "security": [
@@ -2597,13 +3020,13 @@
                 ]
             }
         },
-        "/api/student-result": {
+        "/student_result": {
             "post": {
                 "tags": [
-                    "Student Result"
+                    "UserResults"
                 ],
-                "summary": "إرسال نتيجة الطالب",
-                "operationId": "3369cf57fcf98d4f841fbebf1049cae8",
+                "summary": "حفظ نتيجة إجابة الطالب على سؤال",
+                "operationId": "bb598eda733a27fad18a69989f746c1c",
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -2616,11 +3039,11 @@
                                 "properties": {
                                     "question_id": {
                                         "type": "integer",
-                                        "example": 1
+                                        "example": 15
                                     },
                                     "answer_id": {
                                         "type": "integer",
-                                        "example": 5
+                                        "example": 44
                                     }
                                 },
                                 "type": "object"
@@ -2675,6 +3098,39 @@
                     "token": {
                         "type": "string",
                         "example": "jdsjdfhsdfjbsdbdfjdfbsdfjkfbjsjdh"
+                    }
+                },
+                "type": "object"
+            },
+            "AnswerResource": {
+                "title": "Answer Resource",
+                "description": "نموذج يمثل إجابة سؤال في بنك الأسئلة",
+                "properties": {
+                    "id": {
+                        "description": "معرّف الإجابة",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "answer": {
+                        "description": "نص الإجابة",
+                        "type": "string",
+                        "example": "القاهرة"
+                    },
+                    "is_correct": {
+                        "description": "هل الإجابة صحيحة؟",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "media": {
+                        "description": "رابط الوسائط (صورة أو صوت) المرتبطة بالإجابة",
+                        "type": "string",
+                        "example": "https://example.com/storage/answers/1.png",
+                        "nullable": true
+                    },
+                    "media_type": {
+                        "description": "نوع الوسائط (image, audio, video)",
+                        "type": "string",
+                        "example": "image"
                     }
                 },
                 "type": "object"
@@ -2742,6 +3198,50 @@
                     "is_active": {
                         "type": "boolean",
                         "example": true
+                    }
+                },
+                "type": "object"
+            },
+            "JoinCourseResource": {
+                "title": "Join Course Resource",
+                "description": "نموذج يمثل بيانات اشتراك الطالب في الكورس",
+                "properties": {
+                    "id": {
+                        "description": "معرّف السجل",
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "user_id": {
+                        "description": "معرّف المستخدم الذي انضم للكورس",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "course_id": {
+                        "description": "معرّف الكورس",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "organization_id": {
+                        "description": "معرّف المؤسسة التعليمية",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "account_number": {
+                        "description": "رقم الحساب المستخدم في الدفع (إن وُجد)",
+                        "type": "string",
+                        "example": "123456789",
+                        "nullable": true
+                    },
+                    "image": {
+                        "description": "صورة إيصال الدفع",
+                        "type": "string",
+                        "example": "https://example.com/storage/payment_receipt.png",
+                        "nullable": true
+                    },
+                    "status": {
+                        "description": "حالة الانضمام للكورس (مثل: pending, approved, rejected)",
+                        "type": "string",
+                        "example": "pending"
                     }
                 },
                 "type": "object"
@@ -2840,53 +3340,206 @@
                 },
                 "type": "object"
             },
-            "Session": {
+            "QuestionBankResource": {
+                "title": "Question Bank Resource",
+                "description": "نموذج يمثل بنك الأسئلة ومحتواه من الأسئلة",
                 "properties": {
                     "id": {
+                        "description": "معرّف بنك الأسئلة",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "description": "اسم بنك الأسئلة",
+                        "type": "string",
+                        "example": "بنك أسئلة الرياضيات - الصف الثالث"
+                    },
+                    "description": {
+                        "description": "وصف مختصر لبنك الأسئلة",
+                        "type": "string",
+                        "example": "يحتوي على مجموعة من أسئلة الرياضيات للصف الثالث.",
+                        "nullable": true
+                    },
+                    "organization_id": {
+                        "description": "معرّف المؤسسة التعليمية المالكة لبنك الأسئلة",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "stage_and_subject_id": {
+                        "description": "معرّف المرحلة والمادة المرتبطة ببنك الأسئلة",
+                        "type": "integer",
+                        "example": 10
+                    },
+                    "image": {
+                        "description": "رابط صورة بنك الأسئلة",
+                        "type": "string",
+                        "example": "https://example.com/storage/images/question_bank.png",
+                        "nullable": true
+                    },
+                    "is_active": {
+                        "description": "هل بنك الأسئلة مفعّل أم لا",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "order": {
+                        "description": "ترتيب العرض لبنك الأسئلة",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "price": {
+                        "description": "سعر الاشتراك في بنك الأسئلة (إن وُجد)",
+                        "type": "number",
+                        "format": "float",
+                        "example": 49.99
+                    },
+                    "questions": {
+                        "description": "الأسئلة التابعة لبنك الأسئلة",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/QuestionsResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "QuestionsResource": {
+                "title": "Questions Resource",
+                "description": "نموذج يمثل سؤال داخل بنك الأسئلة مع الإجابات الخاصة به",
+                "properties": {
+                    "id": {
+                        "description": "معرّف السؤال",
+                        "type": "integer",
+                        "example": 5
+                    },
+                    "question": {
+                        "description": "نص السؤال",
+                        "type": "string",
+                        "example": "ما هي عاصمة فرنسا؟"
+                    },
+                    "degree": {
+                        "description": "درجة السؤال",
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "is_active": {
+                        "description": "هل السؤال مفعل أم لا",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "question_bank_id": {
+                        "description": "معرّف بنك الأسئلة المرتبط بهذا السؤال",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "question_type": {
+                        "description": "نوع السؤال (اختياري، صح أو خطأ، مقالي)",
+                        "type": "string",
+                        "enum": [
+                            "choice",
+                            "true_false",
+                            "essay"
+                        ],
+                        "example": "choice"
+                    },
+                    "difficulty": {
+                        "description": "مستوى صعوبة السؤال",
+                        "type": "string",
+                        "enum": [
+                            "easy",
+                            "medium",
+                            "hard"
+                        ],
+                        "example": "medium"
+                    },
+                    "media": {
+                        "description": "رابط الوسائط (صورة / صوت / فيديو) إن وُجد",
+                        "type": "string",
+                        "example": "https://example.com/images/question1.png",
+                        "nullable": true
+                    },
+                    "media_type": {
+                        "description": "نوع الوسائط المرتبطة بالسؤال",
+                        "type": "string",
+                        "enum": [
+                            "image",
+                            "audio",
+                            "video",
+                            "text"
+                        ],
+                        "example": "image"
+                    },
+                    "answers": {
+                        "description": "قائمة بالإجابات المحتملة لهذا السؤال",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/AnswerResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "SessionResource": {
+                "title": "Session Resource",
+                "description": "تفاصيل الجلسة (Session) ضمن الكورس، وقد تحتوي على جلسات فرعية (Children)",
+                "properties": {
+                    "id": {
+                        "description": "معرّف الجلسة",
                         "type": "integer",
                         "example": 5
                     },
                     "name": {
+                        "description": "اسم الجلسة",
                         "type": "string",
-                        "example": "aaa"
+                        "example": "مقدمة في البرمجة"
                     },
                     "description": {
+                        "description": "وصف الجلسة",
                         "type": "string",
-                        "example": "ddd"
+                        "example": "جلسة تشرح أساسيات البرمجة بلغة PHP"
                     },
                     "course_id": {
+                        "description": "معرّف الكورس الذي تنتمي إليه الجلسة",
                         "type": "integer",
                         "example": 1
                     },
                     "parent_id": {
+                        "description": "معرّف الجلسة الأب إن كانت جلسة فرعية",
                         "type": "integer",
                         "example": null,
                         "nullable": true
                     },
                     "link": {
+                        "description": "رابط الجلسة (في حال كانت فيديو أو بث مباشر)",
                         "type": "string",
-                        "example": "ddd"
+                        "example": "https://example.com/session/intro",
+                        "nullable": true
                     },
                     "file": {
+                        "description": "ملف مرفق مع الجلسة إن وُجد",
                         "type": "string",
-                        "example": "ddd"
+                        "example": "https://example.com/storage/files/lecture1.pdf",
+                        "nullable": true
                     },
                     "order": {
+                        "description": "ترتيب الجلسة داخل الكورس",
                         "type": "integer",
                         "example": 1
                     },
                     "is_active": {
+                        "description": "حالة تفعيل الجلسة",
                         "type": "boolean",
                         "example": true
                     },
                     "type": {
+                        "description": "نوع الجلسة (فيديو - PDF - واجب عملي - اختبار)",
                         "type": "string",
                         "example": "فيديو"
                     },
                     "children": {
+                        "description": "الجلسات الفرعية المرتبطة بهذه الجلسة (إن وُجدت)",
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/Session"
+                            "$ref": "#/components/schemas/SessionResource"
                         }
                     }
                 },
@@ -2918,6 +3571,111 @@
                 },
                 "type": "object"
             },
+            "StudentResultResource": {
+                "title": "Student Result Resource",
+                "description": "تفاصيل نتيجة الطالب في بنك الأسئلة",
+                "properties": {
+                    "id": {
+                        "description": "معرّف نتيجة الطالب",
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "user": {
+                        "description": "بيانات الطالب",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 7
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "أحمد محمد"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "organization_id": {
+                        "description": "معرّف المؤسسة التعليمية",
+                        "type": "integer",
+                        "example": 3
+                    },
+                    "question_bank": {
+                        "description": "بيانات بنك الأسئلة المرتبط بالنتيجة",
+                        "properties": {
+                            "id": {
+                                "type": "integer",
+                                "example": 10
+                            },
+                            "name": {
+                                "type": "string",
+                                "example": "اختبار نهاية الفصل الدراسي الأول"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "is_finished": {
+                        "description": "هل أنهى الطالب الاختبار؟",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "total_questions": {
+                        "description": "إجمالي عدد الأسئلة في بنك الأسئلة",
+                        "type": "integer",
+                        "example": 20
+                    },
+                    "answered_questions": {
+                        "description": "عدد الأسئلة التي أجاب عليها الطالب",
+                        "type": "integer",
+                        "example": 18
+                    },
+                    "correct_answers": {
+                        "description": "عدد الإجابات الصحيحة",
+                        "type": "integer",
+                        "example": 15
+                    },
+                    "answers": {
+                        "description": "تفاصيل إجابات الطالب لكل سؤال",
+                        "type": "array",
+                        "items": {
+                            "properties": {
+                                "question_id": {
+                                    "description": "معرّف السؤال",
+                                    "type": "integer",
+                                    "example": 5
+                                },
+                                "question_name": {
+                                    "description": "نص السؤال",
+                                    "type": "string",
+                                    "example": "ما هي عاصمة فرنسا؟"
+                                },
+                                "answer_id": {
+                                    "description": "معرّف الإجابة المختارة",
+                                    "type": "integer",
+                                    "example": 2
+                                },
+                                "answer_text": {
+                                    "description": "نص الإجابة المختارة",
+                                    "type": "string",
+                                    "example": "باريس"
+                                },
+                                "is_correct": {
+                                    "description": "هل الإجابة صحيحة؟",
+                                    "type": "boolean",
+                                    "example": true
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "created_at": {
+                        "description": "تاريخ إنشاء النتيجة",
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2025-11-02 18:30:00"
+                    }
+                },
+                "type": "object"
+            },
             "SubjectResource": {
                 "properties": {
                     "id": {
@@ -2934,6 +3692,62 @@
                     }
                 },
                 "type": "object"
+            },
+            "User": {
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "Ali Ahmed"
+                    },
+                    "email": {
+                        "type": "string",
+                        "example": "ali@example.com"
+                    },
+                    "phone": {
+                        "type": "string",
+                        "example": "+201234567890"
+                    },
+                    "parent_name": {
+                        "type": "string",
+                        "example": "Ahmed Hassan",
+                        "nullable": true
+                    },
+                    "parent_phone": {
+                        "type": "string",
+                        "example": "+201098765432",
+                        "nullable": true
+                    },
+                    "organization_id": {
+                        "type": "integer",
+                        "example": 2
+                    },
+                    "image": {
+                        "type": "string",
+                        "example": "https://example.com/storage/profile.jpg",
+                        "nullable": true
+                    },
+                    "type": {
+                        "type": "string",
+                        "example": "student"
+                    },
+                    "country_code": {
+                        "type": "string",
+                        "example": "+20"
+                    },
+                    "is_verified": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "api_token": {
+                        "type": "string",
+                        "example": "1|abcdef1234567890"
+                    }
+                },
+                "type": "object"
             }
         },
         "securitySchemes": {
@@ -2944,6 +3758,12 @@
                 "in": "header",
                 "bearerFormat": "JWT",
                 "scheme": "bearer"
+            },
+            "sanctum": {
+                "type": "apiKey",
+                "description": "Enter token in format (Bearer <token>)",
+                "name": "Authorization",
+                "in": "header"
             }
         }
     },
@@ -2959,6 +3779,10 @@
         {
             "name": "Education Types",
             "description": "Operations related to education types"
+        },
+        {
+            "name": "JoinCourse",
+            "description": "API Endpoints for joining courses"
         },
         {
             "name": "Organizations",
@@ -2981,24 +3805,16 @@
             "description": "Subjects"
         },
         {
-            "name": "Authentication",
-            "description": "Authentication"
+            "name": "Users",
+            "description": "Users"
         },
         {
-            "name": "Education",
-            "description": "Education"
+            "name": "QuestionBank",
+            "description": "QuestionBank"
         },
         {
-            "name": "User",
-            "description": "User"
-        },
-        {
-            "name": "Question Bank",
-            "description": "Question Bank"
-        },
-        {
-            "name": "Student Result",
-            "description": "Student Result"
+            "name": "UserResults",
+            "description": "UserResults"
         }
     ]
 }

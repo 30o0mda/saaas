@@ -15,6 +15,7 @@ use App\Http\Requests\Sessions\UpdateSessionRequest;
 use App\Http\Resources\Sessions\SessionResource;
 use App\Models\course;
 use App\Models\Session;
+use App\Service\Session\SessionService;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 
@@ -26,6 +27,14 @@ use Illuminate\Http\Request;
  */
 class SessionController extends Controller
 {
+
+    protected $sessionService;
+
+    public function __construct(SessionService $sessionService)
+    {
+        $this->sessionService = $sessionService;
+    }
+
     /**
      * @OA\Post(
      *     path="/create_session",
@@ -52,7 +61,7 @@ class SessionController extends Controller
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم إضافة الجلسة بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="session", ref="#/components/schemas/Session")
+     *                 @OA\Property(property="session", ref="#/components/schemas/SessionResource")
      *             )
      *         )
      *     ),
@@ -62,34 +71,8 @@ class SessionController extends Controller
     public function createSession(CreateSessionRequest $request)
     {
         $data = $request->validated();
-        if (!empty($data['parent_id'] ?? null)) {
-            $parentSession = Session::findOrFail($data['parent_id']);
-            $data['course_id'] = $parentSession->course_id;
-        }
-        if (empty($data['parent_id']) && empty($data['course_id'])) {
-            return ApiResponseHelper::response(false, 'يجب تحديد course_id عند عدم وجود parent_id');
-        }
-        if (empty($data['parent_id'] ?? null)) {
-            $order = Session::whereNull('parent_id')->where('course_id', $data['course_id'])->max('order') + 1;
-        } else {
-            $session = Session::find($data['parent_id']);
-            $order = Session::where('parent_id', $data['parent_id'])->max('order') + 1;
-        }
-        $session = Session::create([
-            'name' => $data['name'],
-            'description' => $data['description'] ?? null,
-            'parent_id' => $data['parent_id'] ?? null,
-            'type' => SessionEnum::from($data['type'])->value,
-            'link' => $data['link'] ?? null,
-            'file' => $data['file'] ?? null,
-            'course_id' => $data['course_id'],
-            'is_active' => $data['is_active'] ?? 1,
-            'order' => $order,
-            'organization_id' => auth()->user()->organization_id,
-        ]);
-        return ApiResponseHelper::response(true, 'تم إضافة الجلسة بنجاح', [
-            'session' => new SessionResource($session),
-        ]);
+
+        return $this->sessionService->createSession($data)->getData();
     }
 
 
@@ -125,7 +108,7 @@ class SessionController extends Controller
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم تحديث الجلسة بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="session", ref="#/components/schemas/Session")
+     *                 @OA\Property(property="session", ref="#/components/schemas/SessionResource")
      *             )
      *         )
      *     ),
@@ -134,19 +117,7 @@ class SessionController extends Controller
     public function updateSession(UpdateSessionRequest $request)
     {
         $data = $request->validated();
-        $session = Session::find($data['session_id']);
-        $session->update([
-            'name' => $data['name'] ?? $session->name,
-            'description' => $data['description'] ?? $session->description,
-            'parent_id' => $data['parent_id'] ?? $session->parent_id,
-            'type' => SessionEnum::from($data['type'])->value ?? $session->type,
-            'link' => $data['link'] ?? $session->link,
-            'file' => $data['file'] ?? $session->file,
-            'course_id' => $data['course_id'] ?? $session->course_id,
-        ]);
-        return ApiResponseHelper::response(true, 'تم تحديث الجلسة بنجاح', [
-            'session' => new SessionResource($session),
-        ]);
+        return $this->sessionService->updateSession($data)->getData();
     }
 
         /**
@@ -168,7 +139,7 @@ class SessionController extends Controller
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب الجلسة بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="session", ref="#/components/schemas/Session")
+     *                 @OA\Property(property="session", ref="#/components/schemas/SessionResource")
      *             )
      *         )
      *     ),
@@ -179,10 +150,7 @@ class SessionController extends Controller
     public function fetchSessionDetails(FetchSessionRequest $request)
     {
         $data = $request->validated();
-        $session = Session::find($data['session_id']);
-        return ApiResponseHelper::response(true, 'تم جلب الجلسة بنجاح', [
-            'session' => new SessionResource($session),
-        ]);
+        return $this->sessionService->fetchSessionDetails($data)->getData();
     }
 
 
@@ -212,9 +180,7 @@ class SessionController extends Controller
     public function deleteSession(DeleteSessionRequest $request)
     {
         $data = $request->validated();
-        $session = Session::find($data['session_id']);
-        $session->delete();
-        return ApiResponseHelper::response(true, 'تم حذف الجلسة بنجاح');
+        return $this->sessionService->deleteSession($data)->getData();
     }
 
 
@@ -237,7 +203,7 @@ class SessionController extends Controller
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم تغيير حالة الجلسة بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="session", ref="#/components/schemas/Session")
+     *                 @OA\Property(property="session", ref="#/components/schemas/SessionResource")
      *             )
      *         )
      *     ),
@@ -247,14 +213,7 @@ class SessionController extends Controller
     public function isActiveSession(IsActiveSessionRequest $request)
     {
         $data = $request->validated();
-        $session = Session::find($data['session_id']);
-        $is_active = $session->is_active;
-        $session->update([
-            'is_active' => !$is_active
-        ]);
-        return ApiResponseHelper::response(true, 'تم تغيير حالة الجلسة بنجاح', [
-            'session' => new SessionResource($session),
-        ]);
+        return $this->sessionService->isActiveSession($data)->getData();
     }
 
 
@@ -284,7 +243,7 @@ class SessionController extends Controller
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم تغيير ترتيب الجلسة بنجاح"),
      *             @OA\Property(property="data", type="object",
-     *                 @OA\Property(property="session", ref="#/components/schemas/Session")
+     *                 @OA\Property(property="session", ref="#/components/schemas/SessionResource")
      *             )
      *         )
      *     ),
@@ -294,14 +253,7 @@ class SessionController extends Controller
     public function orderSession(orderSessionRequest $request)
     {
         $data = $request->validated();
-        $session = Session::find($data['session_id']);
-        $session->update([
-            'order' => $data['order']
-        ]);
-        Session::where('organization_id', auth()->user()->organization_id)->where('order', '>=', $data['order'])->increment('order');
-        return ApiResponseHelper::response(true, 'تم تغيير ترتيب الجلسة بنجاح', [
-            'session' => new SessionResource($session),
-        ]);
+        return $this->sessionService->orderSession($data)->getData();
     }
 
        /**
@@ -341,7 +293,7 @@ class SessionController extends Controller
      *         @OA\JsonContent(
      *             @OA\Property(property="status", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="تم جلب جميع الجلسات بنجاح"),
-     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Session"))
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/SessionResource"))
      *         )
      *     )
      * )
@@ -350,19 +302,6 @@ class SessionController extends Controller
     public function fetchAllSessions(FetchAllSessionRequest $request)
     {
         $data = $request->validated();
-        $query = session::where('organization_id', auth()->user()->organization_id);
-        if (isset($data['word'])) {
-            $query->where('name', 'like', '%' . $data['word'] . '%');
-        }
-        $query->orderBy('order', 'asc');
-        if (isset($data['with_paginate']) && $data['with_paginate'] == 1) {
-            $per_page = isset($data['limit']) ? $data['limit'] : 10;
-            $all_session = $query->paginate($per_page);
-            $response = SessionResource::collection($all_session)->response()->getData(true);
-        } else {
-            $all_session = $query->get();
-            $response = SessionResource::collection($all_session);
-        }
-        return ApiResponseHelper::response(true, 'تم جلب جميع الجلسات بنجاح', $response);
+        return $this->sessionService->fetchAllSessions($data)->getData();
     }
 }

@@ -46,9 +46,9 @@ class OrganizationEmployeeResource extends JsonResource
             'type' => $this->type->label() ?? null,
             'image' => $this->image ?? null,
             'is_master' => $this->is_master ?? false,
-            'parent_id' => $this->parent_id ?? null,
+            'parent_id' => (int)$this->parent_id ?? null,
             'organization_id'=>$this->organization_id ?? null,
-
+            'token' => $this->token ?? null
         ];
     }
 }

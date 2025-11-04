@@ -27,6 +27,7 @@ class OrganizationEmployeeRequest extends FormRequest
             'phone'=>'required|string',
             'type'=>'required|int',
             'password' => 'required|string',
+            'parent_id' => 'nullable|int',
 
         ];
     }

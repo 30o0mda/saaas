@@ -49,7 +49,7 @@ use SebastianBergmann\Diff\Diff;
  *         property="answers",
  *         type="array",
  *         description="قائمة بالإجابات المحتملة لهذا السؤال",
- *         @OA\Items(ref="#/components/schemas/AnswersResource")
+ *         @OA\Items(ref="#/components/schemas/AnswerResource")
  *     )
  * )
  */

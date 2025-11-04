@@ -22,6 +22,8 @@ use SebastianBergmann\Diff\Diff;
  *     @OA\Property(property="media", type="string", nullable=true, example="https://example.com/storage/answers/1.png", description="رابط الوسائط (صورة أو صوت) المرتبطة بالإجابة"),
  *     @OA\Property(property="media_type", type="string", example="image", description="نوع الوسائط (image, audio, video)")
  * )
+ * 
+ * )
  */
 class AnswersResource extends JsonResource
 {

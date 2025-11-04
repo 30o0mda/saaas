@@ -10,6 +10,7 @@ use App\Http\Requests\Subjects\UpdateSubjectRequest;
 use App\Http\Requests\Subjects\DeleteSubjectRequest;
 use App\Http\Resources\Subjects\SubjectResource;
 use App\Models\Subject;
+use App\Service\Subject\SubjectService;
 use Illuminate\Http\Request;
 
 /**
@@ -20,6 +21,11 @@ use Illuminate\Http\Request;
  */
 class SubjectController extends Controller
 {
+
+    protected $subjectService;
+    public function __construct(SubjectService $subjectService){
+        $this->subjectService = $subjectService;
+    }
         /**
      * @OA\Post(
      *     path="/create_subject",
@@ -49,13 +55,7 @@ class SubjectController extends Controller
      */
     public function createSubject(CreateSubjectRequest $request) {
         $data = $request->validated();
-        $subject = Subject::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-        ]);
-        return ApiResponseHelper::response(true, 'تم إنشاء الموضوع بنجاح', [
-            'subject' => new SubjectResource($subject),
-        ]);
+        return $this->subjectService->createSubject($data)->getData();
     }
 
         /**
@@ -92,14 +92,7 @@ class SubjectController extends Controller
      */
     public function updateSubject(UpdateSubjectRequest $request) {
         $data = $request->validated();
-        $subject = Subject::find($data['subject_id']);
-        $subject->update([
-            'name' => $data['name'] ?? $subject->name,
-            'description' => $data['description'] ?? $subject->description,
-        ]);
-        return ApiResponseHelper::response(true, 'تم تحديث الموضوع بنجاح', [
-            'subject' => new SubjectResource($subject),
-        ]);
+        return $this->subjectService->updateSubject($data)->getData();
     }
 
         /**
@@ -130,10 +123,7 @@ class SubjectController extends Controller
 
     public function fetchSubject(FetchSubjectRequest $request) {
         $data = $request->validated();
-        $subject = Subject::find($data['subject_id']);
-        return ApiResponseHelper::response(true, 'تم جلب الموضوع بنجاح', [
-            'subject' => new SubjectResource($subject),
-        ]);
+        return $this->subjectService->fetchSubject($data)->getData();
     }
 
         /**
@@ -160,8 +150,6 @@ class SubjectController extends Controller
 
     public function deleteSubject(DeleteSubjectRequest $request) {
         $data = $request->validated();
-        $subject = Subject::find($data['subject_id']);
-        $subject->delete();
-        return ApiResponseHelper::response(true, 'تم حذف الموضوع بنجاح');
+        return $this->subjectService->deleteSubject($data)->getData();
     }
 }

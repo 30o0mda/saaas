@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class stage extends Model
+class Stage extends Model
 {
     use HasFactory;
 
@@ -18,12 +18,12 @@ class stage extends Model
 
     public function children()
     {
-        return $this->hasMany(stage::class, 'parent_id');
+        return $this->hasMany(Stage::class, 'parent_id');
     }
 
     public function parent()
     {
-        return $this->belongsTo(stage::class, 'parent_id');
+        return $this->belongsTo(Stage::class, 'parent_id');
     }
 
     public function organization()

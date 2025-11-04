@@ -11,6 +11,7 @@ use App\Http\Requests\Stages\UpdateStageRequest;
 use App\Http\Resources\Stages\StageResource;
 use App\Models\stage;
 use App\Models\StageAndSubject;
+use App\Service\Stage\StageService;
 use Illuminate\Http\Request;
 
 /**
@@ -22,6 +23,12 @@ use Illuminate\Http\Request;
 
 class StageController extends Controller
 {
+    protected $StageService;
+
+    public function __construct(StageService $StageService)
+    {
+        $this->StageService = $StageService;
+    }
 
     /**
      * @OA\Post(
@@ -59,19 +66,7 @@ class StageController extends Controller
      */
     public function createStage(CreateStageRequest $request) {
         $data = $request->validated();
-        $data['organization_id'] = auth()->user()->organization_id ?? null;
-        $data['parent_id'] = $data['parent_id'] ?? null;
-        $stage = stage::create([
-            'name' => $data['name'],
-            'education_type_id' => $data['education_type_id'],
-            'organization_id' => $data['organization_id'],
-            'parent_id' => $data['parent_id'],
-        ]);
-        if(!empty($data['subject_ids'])) {
-            $stage->subjects()->attach($data['subject_ids']);
-        }
-        return ApiResponseHelper::response(true, 'تم إنشاء المرحلة بنجاح', [
-            'stage' => new StageResource($stage),]);
+         return $this->StageService->createStage($data)->getData();
     }
 
         /**
@@ -118,18 +113,7 @@ class StageController extends Controller
 
     public function updateStage(UpdateStageRequest $request) {
         $data = $request->validated();
-        $stage = stage::find($data['stage_id']);
-        $stage->update([
-            'name' => $data['name'] ?? $stage->name,
-            'education_type_id' => $data['education_type_id'] ?? $stage->education_type_id,
-            'organization_id' => $data['organization_id'] ?? $stage->organization_id,
-            'parent_id' => $data['parent_id'] ?? $stage->parent_id,
-        ]);
-        if(!empty($data['subject_ids'])) {
-            $stage->subjects()->sync($data['subject_ids']);
-        }
-        return ApiResponseHelper::response(true, 'تم تحديث المرحلة بنجاح', [
-            'stage' => new StageResource($stage),]);
+        return $this->StageService->updateStage($data)->getData();
     }
 
         /**
@@ -165,9 +149,7 @@ class StageController extends Controller
 
     public function fetchStages(FetchStageRequest $request) {
         $data = $request->validated();
-        $stage = stage::find($data['stage_id']);
-        return ApiResponseHelper::response(true, 'تم جلب المرحلة بنجاح', [
-            'stage' => new StageResource($stage),]);
+        return $this->StageService->fetchStages($data)->getData();
     }
 
         /**
@@ -202,8 +184,6 @@ class StageController extends Controller
 
     public function deleteStage(DeleteStageRequest $request) {
         $data = $request->validated();
-        $stage = stage::find($data['stage_id']);
-        $stage->delete();
-        return ApiResponseHelper::response(true, 'تم حذف المرحلة بنجاح');
+        return $this->StageService->deleteStage($data)->getData();
     }
 }

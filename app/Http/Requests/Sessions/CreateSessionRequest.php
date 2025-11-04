@@ -28,7 +28,7 @@ class CreateSessionRequest extends FormRequest
             'file' => 'nullable|string|max:255',
             'type' => 'nullable|integer',
             'parent_id' => 'nullable|exists:sessions,id',
-            'course_id' => ['nullable', 'required_without:parent_id', 'exists:courses,id'],
+            'course_id' => ['nullable', 'required_without:parent_id','exists:courses,id'],
         ];
     }
 }

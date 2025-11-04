@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\AdminResource;
 use App\Models\Admin;
+use App\Params\Admin\LoginParam;
+use App\Service\Admin\AdminService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 /**
@@ -17,6 +19,14 @@ use Illuminate\Support\Facades\Hash;
  */
 class AdminAuthController extends Controller
 {
+
+
+    protected $adminService;
+
+    public function __construct(AdminService $adminService)
+    {
+        $this->adminService = $adminService;
+    }
 
     /**
      *
@@ -60,20 +70,8 @@ class AdminAuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        $data = $request->validated();
-        $credentials = $data['credentials'];
-        $admin = filter_var($credentials, FILTER_VALIDATE_EMAIL)
-            ? Admin::where('email', $credentials)->first()
-            : Admin::where('phone', $credentials)->first();
-        if (!$admin || !Hash::check($data['password'], $admin->password)) {
-            return ApiResponseHelper::response(false, 'بيانات الدخول غير صحيحة');
-        }
-        $token = $admin->createToken('admin-token')->plainTextToken;
-        $admin['api_token'] = $token;
-        return ApiResponseHelper::response(true, 'تم تسجيل الدخول بنجاح', [
-            'admin' => new AdminResource($admin, $token),
-
-        ]);
+        $params = new LoginParam(credentials: $request['credentials'], password: $request['password']);
+      return  $this->adminService->login($params->toArray())->getData();
     }
 }
 

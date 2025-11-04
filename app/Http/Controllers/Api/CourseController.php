@@ -13,6 +13,7 @@ use App\Http\Requests\Courses\orderCourseRequest;
 use App\Http\Requests\Courses\UpdateCourseRequest;
 use App\Http\Resources\Courses\CourseResource;
 use App\Models\course;
+use App\Service\Course\CourseService;
 use Illuminate\Http\Request;
 
 /**
@@ -23,6 +24,13 @@ use Illuminate\Http\Request;
  */
 class CourseController extends Controller
 {
+
+    protected $courseService;
+
+    public function __construct(CourseService $courseService)
+    {
+        $this->courseService = $courseService;
+    }
 
     /**
  * @OA\Post(
@@ -54,22 +62,8 @@ class CourseController extends Controller
  */
     public function createCourse(CreateCourseRequest $request) {
         $data = $request->validated();
-        $order = course::where('organization_id', auth()->user()->organization_id)->max('order') + 1;
-        $course = course::create([
-            'name' => $data['name'],
-            'description' => $data['description'],
-            'organization_id' => auth()->user()->organization_id,
-            // 'is_active' => $data['is_active'],
-            'order' => $order,
-            'stage_and_subject_id' => $data['stage_and_subject_id'],
-            'price' => $data['price'],
-            'is_free' => $data['is_free'],
-        ]);
-        return ApiResponseHelper::response(true, 'تم إنشاء الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        return $this->courseService->createCourse($data)->getData();
     }
-
 
 /**
  * @OA\post(
@@ -104,19 +98,7 @@ class CourseController extends Controller
  */
     public function updateCourse(UpdateCourseRequest $request) {
         $data = $request->validated();
-        $course = course::find($data['course_id']);
-        $course->update([
-            'name' => $data['name'] ?? $course->name,
-            'description' => $data['description'] ?? $course->description,
-            'is_active' => $data['is_active'] ?? $course->is_active,
-            'order' => $data['order'] ?? $course->order,
-            'stage_and_subject_id' => $data['stage_and_subject_id'] ?? $course->stage_and_subject_id,
-            'price' => $data['price'] ?? $course->price,
-            'is_free' => $data['is_free'] ?? $course->is_free,
-        ]);
-        return ApiResponseHelper::response(true, 'تم تحديث الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        return $this->courseService->updateCourse($data)->getData();
     }
 
 
@@ -145,10 +127,7 @@ class CourseController extends Controller
  */
     public function fetchCourseDetails(FetchCourseRequest $request) {
         $data = $request->validated();
-        $course = course::find($data['course_id']);
-        return ApiResponseHelper::response(true, 'تم جلب الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        return $this->courseService->fetchCourseDetails($data)->getData();
     }
 
     /**
@@ -179,11 +158,7 @@ class CourseController extends Controller
 
         public function deleteCourse(DeleteCourseRequest $request) {
         $data = $request->validated();
-        $course = course::find($data['course_id']);
-        $course->delete();
-        return ApiResponseHelper::response(true, 'تم حذف الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        return $this->courseService->deleteCourse($data)->getData();
     }
 
 
@@ -213,15 +188,8 @@ class CourseController extends Controller
  */
 
     public function isActive(IsActiveRequest $request) {
-        $data = request()->validated();
-        $course = course::find($data['course_id']);
-        $is_active = $course->is_active;
-        $course->update([
-            'is_active' => !$is_active
-        ]);
-        return ApiResponseHelper::response(true, 'تم تغيير حالة الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        $data = $request->validated();
+        return $this->courseService->isActive($data)->getData();
     }
 
 
@@ -252,15 +220,8 @@ class CourseController extends Controller
  */
 
     public function orderCourse(orderCourseRequest $request) {
-        $data = request()->validated();
-        $course = course::find($data['course_id']);
-        $course->update([
-            'order' => $data['order']
-        ]);
-        Course::where('organization_id', auth()->user()->organization_id)->where('order', '>=', $data['order'])->increment('order');
-        return ApiResponseHelper::response(true, 'تم تغيير ترتيب الكورس بنجاح', [
-            'course' => new CourseResource($course),
-        ]);
+        $data = $request->validated();
+        return $this->courseService->orderCourse($data)->getData();
     }
 
     /**
@@ -301,22 +262,6 @@ class CourseController extends Controller
 
     public function fetchAllCourses(FetchAllCoursesRequest $request) {
         $data = $request->validated();
-        $query = Course::where('organization_id', auth()->user()->organization_id);
-
-        if(isset($data['word'])) {
-            $query->where('name', 'like', '%' . $data['word'] . '%');
-        }
-
-        $query->orderBy('order', 'asc');
-
-        if(isset($data['with_paginate']) && $data['with_paginate'] == 1) {
-            $per_page = isset($data['limit']) ? $data['limit'] : 10;
-            $all_course = $query->paginate($per_page);
-            $response = CourseResource::collection($all_course)->response()->getData(true);
-        }else {
-            $all_course = $query->get();
-            $response = CourseResource::collection($all_course);
-        }
-        return ApiResponseHelper::response(true, 'تم جلب جميع الكورسات بنجاح', $response);
+        return $this->courseService->fetchAllCourses($data)->getData();
     }
 }
