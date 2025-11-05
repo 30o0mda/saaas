@@ -10,6 +10,10 @@ use App\Http\Requests\EducationType\UpdateEducationTypeRequest;
 use App\Http\Requests\EducationType\FetchEducationTypeRequest;
 use App\Http\Resources\EducationType\EducationTypeResource;
 use App\Models\EducationType;
+use App\Params\EducationType\CreateEducationTypeParam;
+use App\Params\EducationType\DeleteEducationTypeParam;
+use App\Params\EducationType\FetchEducationTypeParam;
+use App\Params\EducationType\UpdateEducationTypeParam;
 use App\Service\EducationType\EducationTypeService;
 use Illuminate\Http\Request;
 
@@ -64,8 +68,8 @@ class EducationTypeController extends Controller
      * )
      */
     public function createEducationType(CreateEducationTypeRequest $request) {
-        $date = $request->validated();
-        return $this->educationTypeService->createEducationType($date)->getData();
+        $params = new CreateEducationTypeParam(name:$request->name, description:$request->description);
+        return $this->educationTypeService->createEducationType($params->toArray())->getData();
     }
 
         /**
@@ -104,8 +108,12 @@ class EducationTypeController extends Controller
      */
 
     public function updateEducationType(UpdateEducationTypeRequest $request) {
-        $date = $request->validated();
-        return $this->educationTypeService->updateEducationType($date)->getData();
+        $params = new UpdateEducationTypeParam(
+            education_type_id:$request->education_type_id,
+             name:$request->name,
+              description:$request->description,
+              is_active:$request->is_active);
+        return $this->educationTypeService->updateEducationType($params->toArray())->getData();
     }
 
         /**
@@ -128,8 +136,8 @@ class EducationTypeController extends Controller
      */
 
     public function fetchEducationTypes(FetchEducationTypeRequest $request) {
-        $date = $request->validated();
-        return $this->educationTypeService->fetchEducationTypes($date)->getData();
+        $params = new FetchEducationTypeParam(education_type_id:$request->education_type_id);
+        return $this->educationTypeService->fetchEducationTypes($params->toArray())->getData();
     }
 
         /**
@@ -164,7 +172,7 @@ class EducationTypeController extends Controller
      */
 
     public function deleteEducationType(DeleteEducationTypeRequest $request) {
-        $date = $request->validated();
-        return $this->educationTypeService->deleteEducationType($date)->getData();
+        $Params = new DeleteEducationTypeParam(education_type_id:$request->education_type_id);
+        return $this->educationTypeService->deleteEducationType($Params->toArray())->getData();
     }
 }

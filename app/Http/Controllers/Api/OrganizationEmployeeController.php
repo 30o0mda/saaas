@@ -12,11 +12,14 @@ use App\Http\Requests\{
     OrganizationEmployeeRequest,
     UpdateOrganizationEmployeeRequest
 };
-use App\Http\Resources\OrganizationEmployeeResource;
-use App\Models\OrganizationEmployee;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
+use App\Params\OrganizationEmployee\CreateOrganizationEmployeeParam;
+use App\Params\OrganizationEmployee\DeleteOrganizationEmployeeParam;
+use App\Params\OrganizationEmployee\FetchOrganizationEmployeeDetailsParam;
+use App\Params\OrganizationEmployee\FetchOrganizationEmployeeParam;
 use App\Service\OrganizationEmployee\OrganizationEmployeeService;
+
+use App\Params\OrganizationEmployee\LoginOrganizationEmployeeParam;
+use App\Params\OrganizationEmployee\UpdateOrganizationEmployeeParam;
 
 /**
  * @OA\Tag(
@@ -65,8 +68,8 @@ class OrganizationEmployeeController extends Controller
      */
     public function login(OrganizationEmployeeLoginRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->login($data)->getData();
+        $params = new LoginOrganizationEmployeeParam(credentials: $request['credentials'], password: $request['password']);
+        return $this->OrganizationEmployeeService->login($params->toArray())->getData();
     }
 
 
@@ -105,8 +108,15 @@ class OrganizationEmployeeController extends Controller
      */
     public function createOrganizationEmployee(OrganizationEmployeeRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->createOrganizationEmployee($data)->getData();
+        $params = new CreateOrganizationEmployeeParam(
+            name: $request->name,
+            email: $request->email,
+            phone: $request->phone,
+            password: $request->password,
+            parent_id: $request->parent_id,
+            type: $request->type
+        );
+        return $this->OrganizationEmployeeService->createOrganizationEmployee($params->toArray())->getData();
     }
 
 
@@ -137,8 +147,13 @@ class OrganizationEmployeeController extends Controller
      */
     public function updateOrganizationEmployee(UpdateOrganizationEmployeeRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->updateOrganizationEmployee($data)->getData();
+        $params = new UpdateOrganizationEmployeeParam(
+            name: $request->name,
+            email: $request->email,
+            phone: $request->phone,
+            organization_employee_id: $request->organization_employee_id
+        );
+        return $this->OrganizationEmployeeService->updateOrganizationEmployee($params->toArray())->getData();
     }
 
 
@@ -156,8 +171,10 @@ class OrganizationEmployeeController extends Controller
      */
     public function fetchOrganizationEmployees(FetchOrganizationEmployeeRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->fetchOrganizationEmployees($data)->getData();
+        $params = new FetchOrganizationEmployeeParam(
+            type: $request->type
+        );
+        return $this->OrganizationEmployeeService->fetchOrganizationEmployees($params->toArray())->getData();
     }
 
 
@@ -176,8 +193,10 @@ class OrganizationEmployeeController extends Controller
      */
     public function fetchOrganizationEmployeeDetails(FetchOrganizationEmployeeDetailsRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->fetchOrganizationEmployeeDetails($data)->getData();
+        $params = new FetchOrganizationEmployeeDetailsParam(
+            organization_employee_id: $request->organization_employee_id
+        );
+        return $this->OrganizationEmployeeService->fetchOrganizationEmployeeDetails($params->toArray())->getData();
     }
 
 
@@ -202,7 +221,9 @@ class OrganizationEmployeeController extends Controller
      */
     public function deleteOrganizationEmployee(DeleteOrganizationEmployeeDetailsRequest $request)
     {
-        $data = $request->validated();
-        return $this->OrganizationEmployeeService->deleteOrganizationEmployee($data)->getData();
+        $params = new DeleteOrganizationEmployeeParam(
+            organization_employee_id: $request->organization_employee_id
+        );
+        return $this->OrganizationEmployeeService->deleteOrganizationEmployee($params->toArray())->getData();
     }
 }

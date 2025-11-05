@@ -15,13 +15,12 @@ class OrganizationEmployeeService
     {
     }
 
-       public function login( $data)
+       public function login( $params)
     {
-        $credentials = $data['credentials'];
-        $organization_employee = filter_var($credentials, FILTER_VALIDATE_EMAIL)
-            ? OrganizationEmployee::where('email', $credentials)->first()
-            : OrganizationEmployee::where('phone', $credentials)->first();
-        if (!$organization_employee || !Hash::check($data['password'], $organization_employee->password)) {
+        $organization_employee = $params['email'] !== null
+            ? OrganizationEmployee::where('email', $params['email'])->first()
+            : OrganizationEmployee::where('phone', $params['phone'])->first();
+        if (!$organization_employee || !Hash::check($params['password'], $organization_employee->password)) {
             return response()->json(['message' => 'بيانات الدخول غير صحيحة'], 401);
         }
         $token = $organization_employee->createToken('organization-employee-token')->plainTextToken;
@@ -33,46 +32,36 @@ class OrganizationEmployeeService
     }
 
 
-     public function createOrganizationEmployee( $data)
+     public function createOrganizationEmployee( $params)
     {
-        $organization = auth()->guard('organization')->user();
-        $employee = OrganizationEmployee::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'phone' => $data['phone'],
-            'password' => Hash::make($data['password']),
-            'type' => $data['type'],
-            'organization_id' => $organization->id ?? null,
-            'parent_id' => $data['parent_id'] ?? null,
-            'image' => $data['image'] ?? null,
-        ]);
+        $employee = OrganizationEmployee::create($params);
         return ApiResponseHelper::response(true, 'تم إنشاء الموظف بنجاح', new OrganizationEmployeeResource($employee));
     }
 
-        public function updateOrganizationEmployee( $data)
+        public function updateOrganizationEmployee( $params)
     {
-        $employee = OrganizationEmployee::find($data['organization_employee_id']);
+        $employee = OrganizationEmployee::find($params['organization_employee_id']);
         if (!$employee) {
             return ApiResponseHelper::response(false, 'الموظف غير موجود', null, 404);
         }
         $employee->update([
-            'name' => $data['name'] ?? $employee->name,
-            'email' => $data['email'] ?? $employee->email,
-            'phone' => $data['phone'] ?? $employee->phone,
+            'name' => $params['name'] ?? $employee->name,
+            'email' => $params['email'] ?? $employee->email,
+            'phone' => $params['phone'] ?? $employee->phone,
         ]);
         return ApiResponseHelper::response(true, 'تم تحديث الموظف بنجاح', new OrganizationEmployeeResource($employee));
     }
 
-     public function fetchOrganizationEmployees( $data)
+     public function fetchOrganizationEmployees( $params)
     {
-        $employees = OrganizationEmployee::where('type', $data['type'])->get();
+        $employees = OrganizationEmployee::where('type', $params['type'])->get();
         return ApiResponseHelper::response(true, 'تم جلب الموظفين بنجاح', OrganizationEmployeeResource::collection($employees));
     }
 
 
-      public function fetchOrganizationEmployeeDetails( $data)
+      public function fetchOrganizationEmployeeDetails( $params)
     {
-        $employee = OrganizationEmployee::find($data['organization_employee_id']);
+        $employee = OrganizationEmployee::find($params['organization_employee_id']);
         if (!$employee) {
             return ApiResponseHelper::response(false, 'الموظف غير موجود', null, 404);
         }
@@ -80,9 +69,9 @@ class OrganizationEmployeeService
     }
 
 
-        public function deleteOrganizationEmployee( $data)
+        public function deleteOrganizationEmployee( $params)
     {
-        $employee = OrganizationEmployee::find($data['organization_employee_id']);
+        $employee = OrganizationEmployee::find($params['organization_employee_id']);
         if (!$employee) {
             return ApiResponseHelper::response(false, 'الموظف غير موجود', null, 404);
         }

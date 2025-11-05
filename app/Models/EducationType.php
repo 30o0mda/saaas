@@ -16,6 +16,8 @@ class EducationType extends Model
         'is_active',
     ];
 
+    protected $table = 'education_types';
+
     public function organization()
     {
         return $this->belongsTo(Organization::class);
@@ -26,5 +28,5 @@ class EducationType extends Model
         return $this->hasMany(Stage::class);
     }
 
-    
+
 }

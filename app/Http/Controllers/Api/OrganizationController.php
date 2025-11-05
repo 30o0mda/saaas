@@ -8,6 +8,7 @@ use App\Http\Requests\CreateOrganizationRequest;
 use App\Http\Resources\OrganizationResource;
 use App\Models\organization;
 use App\Params\Organization\CreateOrganizationParam;
+use App\Params\Organization\CreateOrganizationTeacherParam;
 use App\Service\Organization\OrganizationService;
 
 
@@ -60,7 +61,7 @@ class OrganizationController extends Controller
             email:$request->email,
             phone:$request->phone,
             type:$request->type,
-            max_teachers:$request->max_teachers
+            max_teachers:$request->max_teachers,
         );
         return $this->organizationService->createOrganization($params->toArray())->getData();
     }

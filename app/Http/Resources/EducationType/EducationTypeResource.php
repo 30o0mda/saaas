@@ -26,6 +26,7 @@ class EducationTypeResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        // dd($this);
         return [
             'id' => $this->id ?? null,
             'name' => $this->name ?? null,

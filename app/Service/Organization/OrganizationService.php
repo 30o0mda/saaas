@@ -7,6 +7,8 @@ use App\Helpers\ApiResponseHelper;
 use App\Http\Enum\OrganizationEmployeEnum;
 use App\Http\Resources\OrganizationResource;
 use App\Models\organization;
+use App\Params\Organization\CreateOrganizationTeacherParam;
+use Exception;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -23,15 +25,15 @@ class OrganizationService
         $organization->update([
             'admin_id' => $params['admin_id']
         ]);
-        // $teacher = $organization->organization_employee()->create([
-        //     'name' => $organization->name . ' ' . OrganizationEmployeEnum::TEACHER->label(),
-        //     'email' => $organization->email,
-        //     'phone' => $organization->phone,
-        //     'password' => Hash::make($organization->phone),
-        //     'type' => OrganizationEmployeEnum::TEACHER,
-        //     'is_master' => 1 ,
-        //     'admin_id' => auth()->user()->id ?? null
-        // ]);
+        $paramsTeacher = new CreateOrganizationTeacherParam(
+            name: $organization->name,
+            email: $organization->email,
+            phone: $organization->phone,
+            password: $organization->phone,
+            is_master: 1
+        );
+        // dd($paramsTeacher->toArray());
+            $teacher = $organization->organization_employee()->create($paramsTeacher->toArray());
         // $assistant = $organization->organization_employee()->create([
         //     'name' => $organization->name . ' ' . OrganizationEmployeEnum::ASSISTANT->label(),
         //     'email' => $organization->name . $organization->surname . '@yahoo.com',
@@ -41,7 +43,8 @@ class OrganizationService
         //     'parent_id' => $teacher->id
         // ]);
         return ApiResponseHelper::response(true, 'تم إنشاء المنظمة بنجاح', [
-            'organization' => new OrganizationResource($organization),
+            'organization' => new OrganizationResource($organization, $teacher
+        ),
         ]);
     }
 

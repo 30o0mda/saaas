@@ -9,8 +9,8 @@ class CreateOrganizationParam
     protected string $phone;
     protected int $type;
     protected int $max_teachers;
-
     protected int $admin_id;
+
 
 
     public function __construct(

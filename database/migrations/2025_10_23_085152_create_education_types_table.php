@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->text('description');
             $table->foreignId('organization_id')->nullable()->constrained('organizations')->onDelete('cascade');
-            $table->boolean(column: 'is_active')->default(1)->comment('1 = active, 0 = inactive')->nullable();
+            $table->boolean('is_active')->default(1)->comment('1 = active, 0 = inactive');
             $table->timestamps();
         });
     }

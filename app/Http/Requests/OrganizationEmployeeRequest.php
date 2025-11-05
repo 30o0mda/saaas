@@ -28,7 +28,6 @@ class OrganizationEmployeeRequest extends FormRequest
             'type'=>'required|int',
             'password' => 'required|string',
             'parent_id' => 'nullable|int',
-
         ];
     }
 }
