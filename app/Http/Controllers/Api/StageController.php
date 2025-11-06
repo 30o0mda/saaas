@@ -11,6 +11,7 @@ use App\Http\Requests\Stages\UpdateStageRequest;
 use App\Http\Resources\Stages\StageResource;
 use App\Models\stage;
 use App\Models\StageAndSubject;
+use App\Params\Stage\CreateStageParam;
 use App\Service\Stage\StageService;
 use Illuminate\Http\Request;
 
@@ -64,12 +65,19 @@ class StageController extends Controller
      *     )
      * )
      */
-    public function createStage(CreateStageRequest $request) {
-        $data = $request->validated();
-         return $this->StageService->createStage($data)->getData();
+    public function createStage(CreateStageRequest $request)
+    {
+        $params = new CreateStageParam(
+            name: $request->name,
+            description: $request->description,
+            education_type_id: $request->education_type_id,
+            subject_ids: $request->subject_ids,
+            parent_id: $request->parent_id,
+        );
+        return $this->StageService->createStage($params->toArray())->getData();
     }
 
-        /**
+    /**
      * @OA\post(
      *     path="/update_stage",
      *     summary="تحديث مرحلة",
@@ -111,12 +119,13 @@ class StageController extends Controller
      * )
      */
 
-    public function updateStage(UpdateStageRequest $request) {
+    public function updateStage(UpdateStageRequest $request)
+    {
         $data = $request->validated();
         return $this->StageService->updateStage($data)->getData();
     }
 
-        /**
+    /**
      * @OA\post(
      *     path="/fetch_stage",
      *     summary="جلب مرحلة معينة",
@@ -147,12 +156,13 @@ class StageController extends Controller
      * )
      */
 
-    public function fetchStages(FetchStageRequest $request) {
+    public function fetchStages(FetchStageRequest $request)
+    {
         $data = $request->validated();
         return $this->StageService->fetchStages($data)->getData();
     }
 
-        /**
+    /**
      * @OA\post(
      *     path="/delete_stage",
      *     summary="حذف مرحلة",
@@ -182,7 +192,8 @@ class StageController extends Controller
      * )
      */
 
-    public function deleteStage(DeleteStageRequest $request) {
+    public function deleteStage(DeleteStageRequest $request)
+    {
         $data = $request->validated();
         return $this->StageService->deleteStage($data)->getData();
     }

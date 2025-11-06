@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources\Stages;
 
+use App\Http\Resources\Subjects\SubjectResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,6 +33,7 @@ class StageResource extends JsonResource
             'education_type_id' => $this->education_type_id ?? null,
             'organization_id' => $this->organization_id ?? null,
             'parent_id' => $this->parent_id ? (int)$this->parent_id : null,
+            'subjects' => SubjectResource::collection($this->subjects)
         ];
     }
 }

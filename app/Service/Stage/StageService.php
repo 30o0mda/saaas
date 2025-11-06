@@ -11,20 +11,13 @@ class StageService
     public function __construct()
     {
     }
-       public function createStage( $data) {
-        $data['organization_id'] = auth()->user()->organization_id ?? null;
-        $data['parent_id'] = $data['parent_id'] ?? null;
-        $stage = Stage::create([
-            'name' => $data['name'],
-            'education_type_id' => $data['education_type_id'],
-            'organization_id' => $data['organization_id'],
-            'parent_id' => $data['parent_id'],
-        ]);
-        if(!empty($data['subject_ids'])) {
-            $stage->subjects()->attach($data['subject_ids']);
+       public function createStage( $params) {
+        $stage = Stage::create($params);
+        if(!empty($params['subject_ids'])) {
+            $stage->subjects()->attach($params['subject_ids']);
         }
         return ApiResponseHelper::response(true, 'تم إنشاء المرحلة بنجاح', [
-            'stage' => new StageResource($stage),]);
+            'stage' => new StageResource($stage)]);
     }
 
 

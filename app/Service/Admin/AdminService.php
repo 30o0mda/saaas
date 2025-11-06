@@ -11,11 +11,8 @@ class AdminService
     public function __construct()
     {
     }
-
-
       public function login( $params)
     {
-        
         $admin = $params['email'] !== null
             ? Admin::where('email', $params['email'])->first()
             : Admin::where('phone', $params['phone'])->first();
