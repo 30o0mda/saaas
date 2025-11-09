@@ -12,6 +12,9 @@ use App\Http\Resources\Stages\StageResource;
 use App\Models\stage;
 use App\Models\StageAndSubject;
 use App\Params\Stage\CreateStageParam;
+use App\Params\Stage\DeleteStageParam;
+use App\Params\Stage\FetchStageParam;
+use App\Params\Stage\UpdataStageParam;
 use App\Service\Stage\StageService;
 use Illuminate\Http\Request;
 
@@ -121,8 +124,15 @@ class StageController extends Controller
 
     public function updateStage(UpdateStageRequest $request)
     {
-        $data = $request->validated();
-        return $this->StageService->updateStage($data)->getData();
+        $params = new UpdataStageParam(
+            name: $request->name,
+            description: $request->description,
+            education_type_id: $request->education_type_id,
+            subject_ids: $request->subject_ids,
+            parent_id: $request->parent_id,
+            stage_id: $request->stage_id
+        );
+        return $this->StageService->updateStage($params->toArray())->getData();
     }
 
     /**
@@ -158,8 +168,10 @@ class StageController extends Controller
 
     public function fetchStages(FetchStageRequest $request)
     {
-        $data = $request->validated();
-        return $this->StageService->fetchStages($data)->getData();
+        $params = new FetchStageParam(
+            stage_id: $request->stage_id
+        );
+        return $this->StageService->fetchStages($params->toArray())->getData();
     }
 
     /**
@@ -194,7 +206,9 @@ class StageController extends Controller
 
     public function deleteStage(DeleteStageRequest $request)
     {
-        $data = $request->validated();
-        return $this->StageService->deleteStage($data)->getData();
+        $params = new DeleteStageParam(
+            stage_id: $request->stage_id
+        );
+        return $this->StageService->deleteStage($params->toArray())->getData();
     }
 }

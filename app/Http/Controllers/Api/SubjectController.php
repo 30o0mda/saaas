@@ -54,7 +54,7 @@ class SubjectController extends Controller
      * )
      */
     public function createSubject(CreateSubjectRequest $request) {
-        $data = $request->validated();
+        
         return $this->subjectService->createSubject($data)->getData();
     }
 

@@ -21,30 +21,25 @@ class StageService
     }
 
 
-        public function updateStage( $data) {
-        $stage = stage::find($data['stage_id']);
-        $stage->update([
-            'name' => $data['name'] ?? $stage->name,
-            'education_type_id' => $data['education_type_id'] ?? $stage->education_type_id,
-            'organization_id' => $data['organization_id'] ?? $stage->organization_id,
-            'parent_id' => $data['parent_id'] ?? $stage->parent_id,
-        ]);
+        public function updateStage( $params) {
+        $stage = stage::find($params['stage_id']);
+        $stage->update($params);
         if(!empty($data['subject_ids'])) {
-            $stage->subjects()->sync($data['subject_ids']);
+            $stage->subjects()->sync($params['subject_ids']);
         }
         return ApiResponseHelper::response(true, 'تم تحديث المرحلة بنجاح', [
-            'stage' => new StageResource($stage),]);
+         new StageResource($stage),]);
     }
 
 
-        public function fetchStages( $data) {
-        $stage = stage::find($data['stage_id']);
+        public function fetchStages( $params) {
+        $stage = stage::find($params['stage_id']);
         return ApiResponseHelper::response(true, 'تم جلب المرحلة بنجاح', [
             'stage' => new StageResource($stage),]);
     }
 
-        public function deleteStage( $data) {
-        $stage = stage::find($data['stage_id']);
+        public function deleteStage( $params) {
+        $stage = stage::find($params['stage_id']);
         $stage->delete();
         return ApiResponseHelper::response(true, 'تم حذف المرحلة بنجاح');
     }
